@@ -5,6 +5,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
+import style from './Header.module.scss';
 
 const ToggleButton = styled(MuiToggleButton, {
   shouldForwardProp: (prop) => prop !== 'selectedColor',
@@ -43,7 +44,7 @@ function NavLinks() {
         <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
           <Tooltip title="Создать новую доску">
             <Button sx={{ color: 'inherit' }} startIcon={<AddCircleOutlineIcon />}>
-              {matches && <p>Создать новую доску</p>}
+              {matches && <p className={style.text}>Создать новую доску</p>}
             </Button>
           </Tooltip>
           <Tooltip title="Редактировать профиль">

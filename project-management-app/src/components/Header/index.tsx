@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Container } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -21,9 +22,9 @@ function Header() {
   });
 
   const styleHeader = {
-    background: scrollTrigger ? '#2E3B55' : '#fff',
+    background: scrollTrigger ? '#fff' : '#2E3B55',
     transition: 'all 0.3s ease',
-    color: scrollTrigger ? '#fff' : '#000',
+    color: scrollTrigger ? '#000' : '#fff',
   };
 
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -52,25 +53,27 @@ function Header() {
   return (
     <>
       <AppBar position="sticky" style={styleHeader} component="nav">
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Link className={style.logo} to="/">
-            <Avatar sx={{ mr: 1, cursor: 'pointer' }} alt="Logo" src={Logo} />
+        <Container>
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2, display: { sm: 'none' } }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Link className={style.logo} to="/">
+              <Avatar sx={{ mr: 1, cursor: 'pointer' }} alt="Logo" src={Logo} />
 
-            <Typography variant="h6" component="div">
-              TaskMaster
-            </Typography>
-          </Link>
-          <NavLinks />
-        </Toolbar>
+              <Typography variant="h6" component="div">
+                TaskMaster
+              </Typography>
+            </Link>
+            <NavLinks />
+          </Toolbar>
+        </Container>
       </AppBar>
       <Box component="nav">
         <Drawer
