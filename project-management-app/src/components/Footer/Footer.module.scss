@@ -1,0 +1,41 @@
+.footer {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: #2E3B55;
+}
+.links {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  color: #fff;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: scale(1.1);
+    font-weight: bold;
+  }
+
+  &:active {
+    text-decoration: none;
+    color: #fff;
+  }
+
+  img {
+    display: block;
+    max-width: 100px;
+    margin-left: auto;
+  }
+}
+
+.text {
+  text-align: center;
+  margin: 0;
+}
+
+.gitlinks {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
