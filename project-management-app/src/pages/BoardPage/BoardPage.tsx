@@ -1,9 +1,9 @@
-import { Container, Paper } from '@mui/material';
+import { Paper, Container } from '@mui/material';
 import BoardsContainer from 'components/BoardsContainer/BoardsContainer';
 import React from 'react';
-import style from './MainPage.module.scss';
+import style from './BoardPage.module.scss';
 
-function MainPage() {
+function BoardPage() {
   return (
     <div className={style.main}>
       <Paper sx={{ backgroundColor: 'transparent', pt: '20px', pb: '20px' }} elevation={0}>
@@ -15,4 +15,4 @@ function MainPage() {
   );
 }
 
-export default MainPage;
+export default BoardPage;

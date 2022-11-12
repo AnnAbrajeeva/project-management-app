@@ -1,0 +1,9 @@
+.main {
+    background: repeating-radial-gradient(
+      circle closest-corner at 50% 50%,
+      #000000 0%,
+      #2b3a4e 0%,
+      #000000 100%
+    );
+    min-height: calc(100vh - 68px);
+  }

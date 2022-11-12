@@ -1,26 +1,11 @@
 import React from 'react';
-import { Box, Button, ToggleButtonGroup, Tooltip, useMediaQuery } from '@mui/material';
-import MuiToggleButton from '@mui/material/ToggleButton';
+import { Box, ToggleButtonGroup, Tooltip, useMediaQuery } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import style from './Header.module.scss';
-
-const ToggleButton = styled(MuiToggleButton, {
-  shouldForwardProp: (prop) => prop !== 'selectedColor',
-})(() => ({
-  '&.Mui-selected, &.Mui-selected:hover': {
-    color: 'inherit',
-    backgroundColor: 'red',
-    borderColor: 'transparent',
-  },
-  '&, &.Mui:hover': {
-    color: 'inherit',
-    border: '1px solid rgb(220 220 220 / 75%);',
-    lineHeight: 1,
-  },
-}));
+import { MyButton, ToggleButton } from './styled';
 
 const theme = createTheme({
   palette: {
@@ -41,21 +26,21 @@ function NavLinks() {
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: 'auto' }}>
-        <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+        <Box sx={{ display: { xs: 'none', sm: 'block' }, mr: 2 }}>
           <Tooltip title="Создать новую доску">
-            <Button sx={{ color: 'inherit' }} startIcon={<AddCircleOutlineIcon />}>
+            <MyButton sx={{ color: 'inherit' }} startIcon={<AddCircleOutlineIcon />}>
               {matches && <p className={style.text}>Создать новую доску</p>}
-            </Button>
+            </MyButton>
           </Tooltip>
           <Tooltip title="Редактировать профиль">
-            <Button sx={{ color: 'inherit' }} startIcon={<ManageAccountsIcon />}>
+            <MyButton sx={{ color: 'inherit' }} startIcon={<ManageAccountsIcon />}>
               {matches && <p>Редактировать профиль</p>}
-            </Button>
+            </MyButton>
           </Tooltip>
           <Tooltip title="Выйти">
-            <Button sx={{ color: 'inherit' }} startIcon={<LogoutIcon />}>
+            <MyButton sx={{ color: 'inherit' }} startIcon={<LogoutIcon />}>
               {matches && <p>Выйти</p>}
-            </Button>
+            </MyButton>
           </Tooltip>
         </Box>
         <ToggleButtonGroup
