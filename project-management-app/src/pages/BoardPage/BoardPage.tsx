@@ -1,5 +1,5 @@
 import { Paper, Container } from '@mui/material';
-import BoardsContainer from 'components/BoardsContainer/BoardsContainer';
+import BoardInfo from 'components/BoardInfo';
 import React from 'react';
 import style from './BoardPage.module.scss';
 
@@ -8,7 +8,7 @@ function BoardPage() {
     <div className={style.main}>
       <Paper sx={{ backgroundColor: 'transparent', pt: '20px', pb: '20px' }} elevation={0}>
         <Container sx={{ backgroundColor: 'transparent' }} maxWidth="lg">
-          <BoardsContainer />
+          <BoardInfo />
         </Container>
       </Paper>
     </div>
