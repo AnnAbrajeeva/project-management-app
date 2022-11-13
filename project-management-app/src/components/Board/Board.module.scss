@@ -1,7 +1,7 @@
 @mixin backlight($x, $y, $spread, $size, $colorA, $colorB, $duration) {
   &:after {
     position: absolute;
-    content: "";
+    content: '';
     top: $y;
     left: $x;
     right: 0;
@@ -17,11 +17,17 @@
     background: linear-gradient(270deg, $colorA, $colorB);
     background-size: 200% 200%;
     animation: animateGlow $duration ease infinite;
-    
+
     @keyframes animateGlow {
-      0%{background-position:0% 50%}
-      50%{background-position:100% 50%}
-      100%{background-position:0% 50%}
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
     }
   }
 }
@@ -31,11 +37,11 @@
   flex-direction: column;
   position: relative;
   text-align: center;
-  color: #252B37;
+  color: #252b37;
   background-color: transparent;
   animation: textColor 10s ease infinite;
   @include backlight(0, 5vw, 5vw, 0.75, #0fffc1, #7e0fff, 10s);
-    
+
   @keyframes textColor {
     0% {
       color: #7e0fff;

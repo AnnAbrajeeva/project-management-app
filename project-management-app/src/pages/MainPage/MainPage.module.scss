@@ -3,6 +3,7 @@
   position: relative;
   z-index: 1;
   min-height: calc(100vh - 68px);
+  overflow-x: hidden;
 
   &:before {
     content: '';
