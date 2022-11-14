@@ -12,7 +12,7 @@ function BoardInfo() {
     >
       <div className={style.wrapper}>
         <Board />
-        <EmptyBoard />
+        <EmptyBoard action={() => console.log('column')} text="Добавить колонку" />
       </div>
     </Paper>
   );

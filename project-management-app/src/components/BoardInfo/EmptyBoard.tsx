@@ -1,12 +1,13 @@
 import React from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import style from './BoardInfo.module.scss';
+import { EmptyBoardProps } from 'utils/types';
 
-function EmptyBoard() {
+function EmptyBoard({ text, action }: EmptyBoardProps) {
   return (
-    <div className={style.empty}>
+    <div onClick={action} className={style.empty}>
       <AddIcon />
-      <p>Добавить колонку</p>
+      <p>{text}</p>
     </div>
   );
 }
