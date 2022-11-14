@@ -7,6 +7,7 @@ import './App.css';
 import Footer from 'components/Footer';
 import Welcome from 'pages/WelcomePage';
 import BoardPage from 'pages/BoardPage/BoardPage';
+import NotFound from 'pages/NotFound';
 
 const theme = createTheme({
   typography: {
@@ -22,6 +23,7 @@ function App() {
         <Route path="/" element={<MainPage />} />
         <Route path="/welcome" element={<Welcome />} />
         <Route path="/board" element={<BoardPage />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
     </ThemeProvider>
