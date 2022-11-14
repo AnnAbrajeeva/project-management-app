@@ -1,0 +1,54 @@
+.wrapper {
+  display: flex;
+  gap: 25px;
+  height: calc(100vh - 400px);
+  margin: 0 auto;
+  background: rgb(23 89 255 / 30%);
+  padding: 3em;
+  border-radius: 20px;
+  border-left: 1px solid rgba(255, 255, 255, 0.3);
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+  box-shadow: 20px 20px 40px -6px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  transition: all 0.2s ease-in-out;
+  overflow-x: auto;
+
+  &::-webkit-scrollbar {
+    height: 5px;
+    margin-left: 5px;
+  }
+
+  &::-webkit-scrollbar-track {
+    -webkit-box-shadow: 5px 5px 5px -5px rgba(34, 60, 80, 0.2) inset;
+    background-color: #f9f9fd;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: linear-gradient(180deg, #00c6fb, #005bea);
+  }
+}
+
+.empty {
+  max-height: 73px;
+  font-family: 'Montserrat';
+  display: flex;
+  align-items: center;
+  color: #fff;
+  border-radius: 10px;
+  background-color: #6095ff;
+  padding: 10px 15px;
+  box-shadow: inset 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: scale(0.95);
+    box-shadow: inset -2px 2px 11px 4px rgb(0 0 0 / 70%)
+  }
+
+  p {
+    text-transform: uppercase;
+  }
+}

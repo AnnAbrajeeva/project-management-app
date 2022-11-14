@@ -25,6 +25,7 @@ function Header() {
     background: scrollTrigger ? '#fff' : '#2E3B55',
     transition: 'all 0.3s ease',
     color: scrollTrigger ? '#000' : '#fff',
+    flex: '0 0 auto',
   };
 
   const [mobileOpen, setMobileOpen] = React.useState(false);

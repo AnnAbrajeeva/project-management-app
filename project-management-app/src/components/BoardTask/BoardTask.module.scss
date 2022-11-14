@@ -1,0 +1,29 @@
+.close {
+  position: absolute;
+  cursor: pointer;
+  top: 5px;
+  right: 5px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    color: rgb(114, 221, 248);
+    transform: rotate(360deg);
+  }
+}
+
+.icon {
+  margin-right: 10px;
+  transition: all 0.3s ease;
+  &:hover {
+    color: rgb(114, 221, 248);
+  }
+}
+
+.users {
+  display: flex;
+  margin-left: auto !important;
+}
+
+.user {
+  margin-left: -15px;
+}
