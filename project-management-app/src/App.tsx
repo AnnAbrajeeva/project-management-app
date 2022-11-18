@@ -22,7 +22,7 @@ function App() {
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/welcome" element={<Welcome />} />
-        <Route path="/board" element={<BoardPage />} />
+        <Route path="/boards/:id" element={<BoardPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />

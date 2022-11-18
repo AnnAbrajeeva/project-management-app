@@ -1,7 +1,7 @@
 .wrapper {
   display: flex;
   gap: 25px;
-  height: calc(100vh - 400px);
+  height: calc(100vh - 452px);
   margin: 0 auto;
   background: rgb(23 89 255 / 30%);
   padding: 3em;
@@ -13,6 +13,12 @@
   text-align: center;
   transition: all 0.2s ease-in-out;
   overflow-x: auto;
+
+  @media (max-width: 500px) {
+    & {
+      padding: 3em 0.5em;
+    }
+  }
 
   &::-webkit-scrollbar {
     height: 5px;
@@ -45,7 +51,7 @@
 
   &:hover {
     transform: scale(0.95);
-    box-shadow: inset -2px 2px 11px 4px rgb(0 0 0 / 70%)
+    box-shadow: inset -2px 2px 11px 4px rgb(0 0 0 / 70%);
   }
 
   p {

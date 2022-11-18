@@ -1,18 +1,33 @@
-import { Paper, Container } from '@mui/material';
 import BoardInfo from 'components/BoardInfo';
 import BoardsPageHeader from 'components/BoardsPageHeader';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { AppDispatch, RootState } from 'redux/store';
+import { fetchBoardById, fetchColumnsById } from 'redux/thunks';
 import style from './BoardPage.module.scss';
 
 function BoardPage() {
+  const { id } = useParams();
+  const dispatch = useDispatch<AppDispatch>();
+  const board = useSelector((state: RootState) => state.board.board);
+
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchColumnsById(id));
+      dispatch(fetchBoardById(id));
+    }
+  }, [dispatch, id]);
+
+  const title = board ? board.title : '';
+
   return (
     <div className={style.main}>
-      <Paper sx={{ backgroundColor: 'transparent', pt: '20px', pb: '20px' }} elevation={0}>
-        <Container sx={{ backgroundColor: 'transparent' }} maxWidth="lg">
-          <BoardsPageHeader />
-          <BoardInfo />
-        </Container>
-      </Paper>
+      <div className={style.wrapper}></div>
+      <div className={style.container}>
+        <BoardsPageHeader title={`Board: ${title}`} />
+        <BoardInfo />
+      </div>
     </div>
   );
 }

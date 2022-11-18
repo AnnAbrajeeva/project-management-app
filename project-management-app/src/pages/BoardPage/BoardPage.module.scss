@@ -1,8 +1,26 @@
 .main {
-  background-image: linear-gradient(135deg, #02e4fd, #011e62);
   position: relative;
   z-index: 1;
   height: calc(100vh - 132px);
+  overflow: hidden;
+}
+
+.container {
+  padding: 20px 0;
+  margin: 0 50px;
+
+  @media (max-width: 500px) {
+    & {
+      margin: 0 10px;
+    }
+  }
+}
+
+.wrapper {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background-image: linear-gradient(135deg, #02e4fd, #011e62);
   overflow: hidden;
 
   &:before {
