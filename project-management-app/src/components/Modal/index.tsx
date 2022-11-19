@@ -8,19 +8,21 @@ import CloseIcon from '@mui/icons-material/Close';
 import style from './Modal.module.scss';
 import { ModalProps } from 'utils/types';
 
-function Modal({ open, children, handleClose, title }: ModalProps) {
+function Modal({ open, children, handleClose, title, formSubmit, handleSubmit }: ModalProps) {
   return (
     <Dialog fullWidth={true} maxWidth="sm" open={open} onClose={handleClose}>
       <div onClick={handleClose} className={style.close}>
         <CloseIcon />
       </div>
-      <DialogTitle>{title}</DialogTitle>
-      <DialogContent>{children}</DialogContent>
-      <DialogActions>
-        <Button variant="contained" color="success" onClick={handleClose}>
-          Добавить
-        </Button>
-      </DialogActions>
+      <form>
+        <DialogTitle>{title}</DialogTitle>
+        <DialogContent>{children}</DialogContent>
+        <DialogActions>
+          <Button variant="contained" color="success" onClick={handleSubmit(formSubmit)}>
+            Добавить
+          </Button>
+        </DialogActions>
+      </form>
     </Dialog>
   );
 }

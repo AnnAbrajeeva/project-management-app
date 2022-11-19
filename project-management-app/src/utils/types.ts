@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { FieldValues, SubmitHandler, UseFormHandleSubmit } from 'react-hook-form';
 
 export interface EmptyBoardProps {
   text: string;
@@ -16,6 +17,8 @@ export interface ModalProps {
   handleClose: () => void;
   children?: ReactNode;
   title: string;
+  handleSubmit: UseFormHandleSubmit<ColumnData>;
+  formSubmit: SubmitHandler<FieldValues>;
 }
 
 export interface Board {
@@ -39,7 +42,12 @@ export interface BoardState {
 
 export interface ColumnsState {
   columns: Column[];
-  board: Board | null;
+  status: 'loading' | 'error' | 'success';
+  error: string;
+}
+
+export interface ColumnState {
+  column: Column | null;
   status: 'loading' | 'error' | 'success';
   error: string;
 }
@@ -58,4 +66,14 @@ export interface Column {
 
 export interface BoardsPageHeaderProps {
   title: string;
+}
+
+export interface ColumnData {
+  title: string;
+}
+
+export interface CreateColumnProps {
+  id: string;
+  title: string;
+  order: number;
 }

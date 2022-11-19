@@ -50,9 +50,9 @@ function BoardsContainer() {
       <Grid sx={{ padding: '30px' }} item xs={12} md={6} lg={4}>
         <EmptyBoard action={() => setOpen(true)} text="Добавить доску" />
       </Grid>
-      <Modal open={open} title="Добавить доску" handleClose={handleClose}>
+      {/* <Modal open={open} title="Добавить доску" handleClose={handleClose}>
         {<AddBoard />}
-      </Modal>
+      </Modal> */}
     </Grid>
   );
 }

@@ -1,8 +1,9 @@
+import { ColumnData, CreateColumnProps } from './../utils/types';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 const getToken =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNmY1ZGVlYTIzNmUxMjNiZTdiZGFmYyIsImxvZ2luIjoiMTExIiwiaWF0IjoxNjY4NzYyNDk2LCJleHAiOjE2Njg4MDU2OTZ9.Cx3CwOcmOhghd-O3kluIzL6k_IgGhHDShQW82opF1UU';
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNmY1ZGVlYTIzNmUxMjNiZTdiZGFmYyIsImxvZ2luIjoiMTExIiwiaWF0IjoxNjY4ODQxOTM2LCJleHAiOjE2Njg4ODUxMzZ9.HfRqCv76eMMcCDzEyPoqPpwqe6RAKeUAXX61pVYPjRE';
 
 const api = axios.create({
   baseURL: 'https://final-task-backend-production-8c86.up.railway.app',
@@ -35,7 +36,7 @@ export const fetchBoards = createAsyncThunk('board/fetchBoards', async (_, { rej
 });
 
 export const fetchBoardById = createAsyncThunk(
-  'boards/fetchBoards',
+  'boards/fetchBoardById',
   async (id: string, { rejectWithValue }) => {
     try {
       const res = await api.get(`/boards/${id}`, { data: { id } });
@@ -47,10 +48,22 @@ export const fetchBoardById = createAsyncThunk(
 );
 
 export const fetchColumnsById = createAsyncThunk(
-  'boards/fetchBoards',
+  'columns/fetchColumnsById',
   async (id: string, { rejectWithValue }) => {
     try {
       const res = await api.get(`/boards/${id}/columns`, { data: { id } });
+      return res.data;
+    } catch (error) {
+      return rejectWithValue('Could not fetch columns of this board. Please, try again later.');
+    }
+  }
+);
+
+export const createColumn = createAsyncThunk(
+  'columns/createColumn',
+  async ({ id, title, order }: CreateColumnProps, { rejectWithValue }) => {
+    try {
+      const res = await api.post(`/boards/${id}/columns`, { title, order });
       return res.data;
     } catch (error) {
       return rejectWithValue('Could not fetch columns of this board. Please, try again later.');

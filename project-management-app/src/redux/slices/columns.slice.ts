@@ -1,16 +1,15 @@
 import { ColumnsState } from '../../utils/types';
-import { fetchBoardById, fetchColumnsById } from '../thunks';
+import { fetchColumnsById } from '../thunks';
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState: ColumnsState = {
   columns: [],
-  board: null,
   status: 'loading',
   error: '',
 };
 
 const columnsSlice = createSlice({
-  name: 'column',
+  name: 'columns',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
