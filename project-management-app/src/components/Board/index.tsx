@@ -5,12 +5,36 @@ import AddIcon from '@mui/icons-material/Add';
 import style from './Board.module.scss';
 import CheckIcon from '@mui/icons-material/Check';
 import { Button, Tooltip, TextField } from '@mui/material';
+import { ColumnProps } from 'utils/types';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateColumn } from 'redux/thunks';
+import { AppDispatch, RootState } from 'redux/store';
 
-function Board() {
+function Board({ column }: ColumnProps) {
   const [edit, setEdit] = useState(false);
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState(column.title);
+  const dispatch = useDispatch<AppDispatch>();
+  const board = useSelector((state: RootState) => state.board.board);
 
   const error = title ? false : true;
+
+  function changeTitle() {
+    if (board) {
+      const newColumn = {
+        boardId: board?._id,
+        columnId: column._id,
+        title: title,
+        order: column.order,
+      };
+      dispatch(updateColumn(newColumn));
+      setEdit(false);
+    }
+  }
+
+  function cancelEdit() {
+    setEdit(false);
+    setTitle(column.title);
+  }
 
   return (
     <div className={style.board}>
@@ -22,7 +46,7 @@ function Board() {
       <div className={style.board__header}>
         {!edit ? (
           <h3 onClick={() => setEdit(true)} className={style.board__title}>
-            ToDo
+            {title}
           </h3>
         ) : (
           <div className={style.input}>
@@ -35,10 +59,10 @@ function Board() {
               variant="standard"
             />
             <div>
-              <CheckIcon color="success" />
+              <CheckIcon color="success" onClick={changeTitle} />
             </div>
             <div>
-              <CloseIcon color="error" />
+              <CloseIcon onClick={cancelEdit} color="error" />
             </div>
           </div>
         )}

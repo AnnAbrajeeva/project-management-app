@@ -1,9 +1,9 @@
-import { ColumnData, CreateColumnProps } from './../utils/types';
+import { CreateColumnProps, UpdateColumnProps } from './../utils/types';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 const getToken =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNmY1ZGVlYTIzNmUxMjNiZTdiZGFmYyIsImxvZ2luIjoiMTExIiwiaWF0IjoxNjY4ODQxOTM2LCJleHAiOjE2Njg4ODUxMzZ9.HfRqCv76eMMcCDzEyPoqPpwqe6RAKeUAXX61pVYPjRE';
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNmY1ZGVlYTIzNmUxMjNiZTdiZGFmYyIsImxvZ2luIjoiMTExIiwiaWF0IjoxNjY4OTI2Njk5LCJleHAiOjE2Njg5Njk4OTl9.8YysvDgMY89QlyE2wWvFlXSL3VdyzGSGm_blq7MsIdQ';
 
 const api = axios.create({
   baseURL: 'https://final-task-backend-production-8c86.up.railway.app',
@@ -67,6 +67,18 @@ export const createColumn = createAsyncThunk(
       return res.data;
     } catch (error) {
       return rejectWithValue('Could not fetch columns of this board. Please, try again later.');
+    }
+  }
+);
+
+export const updateColumn = createAsyncThunk(
+  'columns/updateColumn',
+  async ({ boardId, columnId, title, order }: UpdateColumnProps, { rejectWithValue }) => {
+    try {
+      const res = await api.put(`/boards/${boardId}/columns/${columnId}`, { title, order });
+      return res.data;
+    } catch (error) {
+      return rejectWithValue('Could not update column of this board. Please, try again later.');
     }
   }
 );

@@ -67,7 +67,10 @@ function BoardInfo() {
       elevation={0}
     >
       <div className={style.wrapper}>
-        <Board />
+        {columns.map((column) => {
+          return <Board column={column} key={column._id} />;
+        })}
+
         <EmptyBoard action={handleClickOpen} text="Добавить колонку" />
       </div>
       <Modal

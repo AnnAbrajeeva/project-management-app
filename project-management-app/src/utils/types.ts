@@ -77,3 +77,14 @@ export interface CreateColumnProps {
   title: string;
   order: number;
 }
+
+export interface ColumnProps {
+  column: Column;
+}
+
+export interface UpdateColumnProps {
+  boardId: string;
+  columnId: string;
+  title: string;
+  order: number;
+}

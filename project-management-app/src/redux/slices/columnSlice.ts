@@ -1,5 +1,5 @@
 import { ColumnState } from '../../utils/types';
-import { createColumn } from '../thunks';
+import { createColumn, updateColumn } from '../thunks';
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState: ColumnState = {
@@ -22,6 +22,18 @@ const columnSlice = createSlice({
         state.error = action.payload as string;
       }),
       builder.addCase(createColumn.fulfilled, (state, action) => {
+        state.status = 'success';
+        state.error = '';
+      }),
+      builder.addCase(updateColumn.pending, (state) => {
+        state.status = 'loading';
+        state.error = '';
+      }),
+      builder.addCase(updateColumn.rejected, (state, action) => {
+        state.status = 'error';
+        state.error = action.payload as string;
+      }),
+      builder.addCase(updateColumn.fulfilled, (state, action) => {
         state.status = 'success';
         state.error = '';
       });
