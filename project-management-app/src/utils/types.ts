@@ -1,5 +1,12 @@
 import { ReactNode } from 'react';
-import { FieldValues, SubmitHandler, UseFormHandleSubmit } from 'react-hook-form';
+import {
+  Control,
+  FieldErrorsImpl,
+  FieldValues,
+  SubmitHandler,
+  UseFormHandleSubmit,
+  UseFormRegister,
+} from 'react-hook-form';
 
 export interface EmptyBoardProps {
   text: string;
@@ -72,6 +79,12 @@ export interface ColumnData {
   title: string;
 }
 
+export interface TaskData {
+  title: string;
+  description: string;
+  users: string[];
+}
+
 export interface CreateColumnProps {
   id: string;
   title: string;
@@ -87,4 +100,76 @@ export interface UpdateColumnProps {
   columnId: string;
   title: string;
   order: number;
+}
+
+export interface TasksState {
+  tasks: Task[];
+  status: 'loading' | 'error' | 'success';
+  error: string;
+}
+
+export interface TaskState {
+  task: Task | null;
+  status: 'loading' | 'error' | 'success';
+  error: string;
+}
+
+export interface UsersState {
+  users: User[];
+  status: 'loading' | 'error' | 'success';
+  error: string;
+}
+
+export interface User {
+  _id: string;
+  name: string;
+  login: string;
+}
+
+export interface Task {
+  _id: string;
+  title: string;
+  order: number;
+  boardId: string;
+  columnId: string;
+  description: string;
+  userId: string;
+  users: string[];
+}
+
+export interface FetchTasksProps {
+  id: string;
+  columnId: string;
+}
+
+export interface BoardTaskProps {
+  task: Task;
+}
+
+export interface TaskModalProps {
+  open: boolean;
+  handleClose: () => void;
+  formSubmit: SubmitHandler<FieldValues>;
+  handleSubmit: UseFormHandleSubmit<TaskData>;
+  register: UseFormRegister<TaskData>;
+  errors: Partial<
+    FieldErrorsImpl<{
+      title: string;
+      description: string;
+      users: string[];
+    }>
+  >;
+  control: Control<TaskData, unknown>;
+}
+
+export interface CreateTaskProps {
+  id: string;
+  columnId: string;
+  task: {
+    title: string;
+    order: number;
+    description: string;
+    userId: number;
+    users: string[];
+  };
 }

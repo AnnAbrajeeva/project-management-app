@@ -1,9 +1,9 @@
-import { CreateColumnProps, UpdateColumnProps } from './../utils/types';
+import { CreateColumnProps, UpdateColumnProps, FetchTasksProps } from './../utils/types';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 const getToken =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNmY1ZGVlYTIzNmUxMjNiZTdiZGFmYyIsImxvZ2luIjoiMTExIiwiaWF0IjoxNjY4OTI2Njk5LCJleHAiOjE2Njg5Njk4OTl9.8YysvDgMY89QlyE2wWvFlXSL3VdyzGSGm_blq7MsIdQ';
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNmY1ZGVlYTIzNmUxMjNiZTdiZGFmYyIsImxvZ2luIjoiMTExIiwiaWF0IjoxNjY5MjYyMjQ1LCJleHAiOjE2NjkzMDU0NDV9.bZbBrQCQIUrOtRH0pLNNjth0ZSadmQIjzDAXXm189ns';
 
 const api = axios.create({
   baseURL: 'https://final-task-backend-production-8c86.up.railway.app',
@@ -82,3 +82,36 @@ export const updateColumn = createAsyncThunk(
     }
   }
 );
+
+export const fetchTasks = createAsyncThunk(
+  'tasks/fetchTasks',
+  async ({ id, columnId }: FetchTasksProps, { rejectWithValue }) => {
+    try {
+      const res = await api.get(`/boards/${id}/columns/${columnId}/tasks`);
+      return res.data;
+    } catch (error) {
+      return rejectWithValue('Could not fetch columns of this board. Please, try again later.');
+    }
+  }
+);
+
+export const createTask = createAsyncThunk(
+  'task/createTask',
+  async ({ id, title, order }: CreateColumnProps, { rejectWithValue }) => {
+    try {
+      const res = await api.post(`/boards/${id}/columns`, { title, order });
+      return res.data;
+    } catch (error) {
+      return rejectWithValue('Could not fetch columns of this board. Please, try again later.');
+    }
+  }
+);
+
+export const getUsers = createAsyncThunk('users/getUsers', async (_, { rejectWithValue }) => {
+  try {
+    const res = await api.get(`/users`);
+    return res.data;
+  } catch (error) {
+    return rejectWithValue('Could not fetch columns of this board. Please, try again later.');
+  }
+});

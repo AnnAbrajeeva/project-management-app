@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { AppDispatch, RootState } from 'redux/store';
-import { fetchBoardById, fetchColumnsById } from 'redux/thunks';
+import { fetchBoardById, fetchColumnsById, getUsers } from 'redux/thunks';
 import style from './BoardPage.module.scss';
 
 function BoardPage() {
@@ -16,6 +16,7 @@ function BoardPage() {
     if (id) {
       dispatch(fetchColumnsById(id));
       dispatch(fetchBoardById(id));
+      dispatch(getUsers());
     }
   }, [dispatch, id]);
 

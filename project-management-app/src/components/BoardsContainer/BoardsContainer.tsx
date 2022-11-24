@@ -16,7 +16,7 @@ import BoardCard from 'components/BoardCard/BoardCard';
 import EmptyBoard from '../BoardInfo/EmptyBoard';
 import React, { useEffect, useState } from 'react';
 import Modal from 'components/Modal';
-import { fetchBoards } from 'redux/thunks';
+import { fetchBoards, getUsers } from 'redux/thunks';
 import Loader from 'components/Loader';
 import { Board } from 'utils/types';
 
@@ -27,6 +27,7 @@ function BoardsContainer() {
 
   useEffect(() => {
     dispatch(fetchBoards());
+    dispatch(getUsers());
   }, [dispatch]);
 
   function handleClose() {

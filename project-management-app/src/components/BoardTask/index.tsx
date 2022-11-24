@@ -10,8 +10,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import { Tooltip } from '@mui/material';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import User from '../../assets/img/user.png';
+import { BoardTaskProps } from 'utils/types';
 
-function BoardTask() {
+function BoardTask({ task }: BoardTaskProps) {
   return (
     <Card sx={{ minWidth: 275, overflow: 'initial', position: 'relative' }}>
       <div className={style.close}>
@@ -22,7 +23,7 @@ function BoardTask() {
       <CardContent sx={{ display: 'flex', alignItems: 'center' }}>
         <BookmarkIcon />
         <Typography variant="h6" component="div">
-          New Task
+          {task.title}
         </Typography>
       </CardContent>
       <CardActions>
