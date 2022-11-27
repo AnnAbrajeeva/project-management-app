@@ -6,12 +6,17 @@ const initialState: BoardsState = {
   boards: [],
   status: 'loading',
   error: '',
+  modal: false,
 };
 
 const boardsSlice = createSlice({
   name: 'boards',
   initialState,
-  reducers: {},
+  reducers: {
+    setModal(state, action) {
+      state.modal = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchBoards.pending, (state) => {
       state.status = 'loading';
@@ -31,5 +36,5 @@ const boardsSlice = createSlice({
   },
 });
 
-export const {} = boardsSlice.actions;
+export const { setModal } = boardsSlice.actions;
 export default boardsSlice.reducer;

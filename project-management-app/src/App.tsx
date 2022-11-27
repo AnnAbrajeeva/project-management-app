@@ -9,6 +9,8 @@ import Welcome from 'pages/WelcomePage';
 import BoardPage from 'pages/BoardPage/BoardPage';
 import NotFound from 'pages/NotFound';
 import LoginPage from 'pages/LoginPage';
+import AuthPage from 'pages/AuthPage';
+import Toast from 'components/Toast/Toast';
 
 const theme = createTheme({
   typography: {
@@ -22,12 +24,14 @@ function App() {
       {window.location.pathname !== ('/welcome' || '/sign-in') && <Header />}
       <Routes>
         <Route path="/" element={<MainPage />} />
-        <Route path="/sign-in" element={<LoginPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/registration" element={<AuthPage />} />
         <Route path="/welcome" element={<Welcome />} />
         <Route path="/boards/:id" element={<BoardPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
+      <Toast />
     </ThemeProvider>
   );
 }

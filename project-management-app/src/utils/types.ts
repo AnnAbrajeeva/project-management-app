@@ -1,3 +1,4 @@
+import { SerializedError } from '@reduxjs/toolkit';
 import { ReactNode } from 'react';
 import {
   Control,
@@ -39,6 +40,7 @@ export interface BoardsState {
   boards: Board[];
   status: 'loading' | 'error' | 'success';
   error: string;
+  modal: boolean;
 }
 
 export interface BoardState {
@@ -82,6 +84,11 @@ export interface ColumnData {
 export interface TaskData {
   title: string;
   description: string;
+  users: string[];
+}
+
+export interface BoardData {
+  title: string;
   users: string[];
 }
 
@@ -146,7 +153,7 @@ export interface BoardTaskProps {
   task: Task;
 }
 
-export interface TaskModalProps {
+export interface ModalFormProps {
   open: boolean;
   handleClose: () => void;
   formSubmit: SubmitHandler<FieldValues>;
@@ -172,4 +179,56 @@ export interface CreateTaskProps {
     userId: number;
     users: string[];
   };
+}
+
+export interface CreateBoardProps {
+  title: string;
+  owner: string;
+  users: string[];
+}
+
+export interface RegisterFormData {
+  name: string;
+  login: string;
+  password: string;
+  confirmPassword: string;
+}
+
+export interface NewUser {
+  name: string;
+  login: string;
+  password: string;
+}
+
+export interface UserLogin {
+  login: string;
+  password: string;
+}
+
+export interface User {
+  _id: string;
+  name: string;
+  login: string;
+}
+
+export interface UserState {
+  user: User | null;
+  status: 'loading' | 'error' | 'success' | '';
+  error: unknown;
+  newUser: NewUser | null;
+  token: string;
+}
+
+export interface SnackbarState {
+  toast: {
+    open: boolean;
+    message: string;
+    view: 'error' | 'success';
+  };
+}
+
+export interface SnackProps {
+  open: boolean;
+  message: string;
+  variant: 'error' | 'success';
 }

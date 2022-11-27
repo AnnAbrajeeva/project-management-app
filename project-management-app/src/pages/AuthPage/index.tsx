@@ -1,10 +1,11 @@
 import React from 'react';
 import { Container, Paper } from '@mui/material';
-import style from './Login.module.scss';
+import style from './Auth.module.scss';
 import ErrorBoundary from 'components/ErrorBoundary/ErrorBoundary';
 import LoginForm from 'components/AuthForm/Login';
+import RegisterForm from 'components/AuthForm/Registration';
 
-function LoginPage() {
+function AuthPage() {
   return (
     <div className={style.main}>
       <div className={style.wrapper}></div>
@@ -30,9 +31,9 @@ function LoginPage() {
           }}
           maxWidth="lg"
         >
-          <h1 className={style.title}>Вход</h1>
+          <h1 className={style.title}>Регистрация</h1>
           <div className={style.formWrapper}>
-            <LoginForm />
+            <RegisterForm />
           </div>
         </Container>
       </Paper>
@@ -40,4 +41,4 @@ function LoginPage() {
   );
 }
 
-export default LoginPage;
+export default AuthPage;

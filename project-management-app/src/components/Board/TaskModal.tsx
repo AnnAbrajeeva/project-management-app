@@ -1,20 +1,10 @@
-import {
-  TextField,
-  FormControl,
-  InputLabel,
-  Select,
-  OutlinedInput,
-  MenuItem,
-  Checkbox,
-  ListItemText,
-  SelectChangeEvent,
-} from '@mui/material';
+import { TextField, FormControl, InputLabel, Select, OutlinedInput, MenuItem } from '@mui/material';
 import Modal from 'components/Modal';
 import React from 'react';
 import { Controller } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/store';
-import { TaskModalProps } from 'utils/types';
+import { ModalFormProps } from 'utils/types';
 
 function TaskModal({
   open,
@@ -24,7 +14,7 @@ function TaskModal({
   register,
   errors,
   control,
-}: TaskModalProps) {
+}: ModalFormProps) {
   const users = useSelector((state: RootState) => state.users.users);
 
   const registerOptions = {

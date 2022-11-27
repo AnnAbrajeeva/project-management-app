@@ -4,8 +4,16 @@ import BoardsContainer from 'components/BoardsContainer/BoardsContainer';
 import BoardsPageHeader from 'components/BoardsPageHeader';
 import style from './MainPage.module.scss';
 import ErrorBoundary from 'components/ErrorBoundary/ErrorBoundary';
+import { getFromLocal } from 'utils/localStorage';
+import { Navigate } from 'react-router-dom';
 
 function MainPage() {
+  const isAuth = getFromLocal('token');
+
+  if (!isAuth) {
+    return <Navigate to="/welcome" />;
+  }
+
   return (
     <div className={style.main}>
       <div className={style.wrapper}></div>

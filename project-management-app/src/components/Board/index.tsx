@@ -7,7 +7,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import { Button, Tooltip, TextField } from '@mui/material';
 import { ColumnProps, CreateTaskProps, TaskData } from 'utils/types';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchTasks, updateColumn } from 'redux/thunks';
+import { createColumn, fetchTasks, updateColumn } from 'redux/thunks';
 import { AppDispatch, RootState } from 'redux/store';
 import { SubmitHandler, FieldValues, useForm } from 'react-hook-form';
 import TaskModal from './TaskModal';

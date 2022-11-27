@@ -3,7 +3,9 @@ import boardSlice from './slices/boardSlice';
 import boardsSlice from './slices/boardsSlice';
 import columnsSlice from './slices/columns.slice';
 import columnSlice from './slices/columnSlice';
+import snackbarSlice from './slices/snackbarSlice';
 import tasksSlice from './slices/tasksSlice';
+import userSlice from './slices/userSlice';
 import usersSlice from './slices/usersSlice';
 
 export const store = configureStore({
@@ -14,6 +16,8 @@ export const store = configureStore({
     board: boardSlice,
     tasks: tasksSlice,
     users: usersSlice,
+    user: userSlice,
+    toast: snackbarSlice,
   },
 });
 

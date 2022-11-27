@@ -1,30 +1,14 @@
-import { CreateColumnProps, UpdateColumnProps, FetchTasksProps } from './../utils/types';
+import {
+  CreateColumnProps,
+  UpdateColumnProps,
+  FetchTasksProps,
+  NewUser,
+  UserLogin,
+  CreateBoardProps,
+} from './../utils/types';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-
-const getToken =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNmY1ZGVlYTIzNmUxMjNiZTdiZGFmYyIsImxvZ2luIjoiMTExIiwiaWF0IjoxNjY5MjYyMjQ1LCJleHAiOjE2NjkzMDU0NDV9.bZbBrQCQIUrOtRH0pLNNjth0ZSadmQIjzDAXXm189ns';
-
-const api = axios.create({
-  baseURL: 'https://final-task-backend-production-8c86.up.railway.app',
-  headers: {
-    'Content-Type': 'application/json',
-    Accept: 'application/json',
-    Authorization: `Bearer ${getToken}`,
-  },
-});
-
-axios.interceptors.request.use(
-  (config) => {
-    const token = getToken;
-    if (!config.headers) config.headers = {};
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => console.log(error)
-);
+import { api, axiosClassic } from 'api/api';
 
 export const fetchBoards = createAsyncThunk('board/fetchBoards', async (_, { rejectWithValue }) => {
   try {
@@ -107,6 +91,18 @@ export const createTask = createAsyncThunk(
   }
 );
 
+export const createBoard = createAsyncThunk(
+  'board/createBoard',
+  async (board: CreateBoardProps, { rejectWithValue }) => {
+    try {
+      const res = await api.post(`/boards`, board);
+      return res.data;
+    } catch (error) {
+      return rejectWithValue('Could not create this board. Please, try again later.');
+    }
+  }
+);
+
 export const getUsers = createAsyncThunk('users/getUsers', async (_, { rejectWithValue }) => {
   try {
     const res = await api.get(`/users`);
@@ -115,3 +111,37 @@ export const getUsers = createAsyncThunk('users/getUsers', async (_, { rejectWit
     return rejectWithValue('Could not fetch columns of this board. Please, try again later.');
   }
 });
+
+export const createUser = createAsyncThunk(
+  'user/createUser',
+  async (user: NewUser, { rejectWithValue }) => {
+    try {
+      const res = await axiosClassic.post(`/auth/signup`, user);
+      return res.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 409) {
+          return rejectWithValue('Такой пользователь уже создан');
+        }
+        return rejectWithValue('Ошибка сервера, попробуйте позже');
+      }
+    }
+  }
+);
+
+export const loginUser = createAsyncThunk(
+  'user/loginUser',
+  async (user: UserLogin, { rejectWithValue }) => {
+    try {
+      const res = await axiosClassic.post(`/auth/signin`, user);
+      return res.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          return rejectWithValue('Неверный логин или пароль');
+        }
+        return rejectWithValue('Ошибка сервера, попробуйте позже');
+      }
+    }
+  }
+);

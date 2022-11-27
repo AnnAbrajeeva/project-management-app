@@ -1,5 +1,5 @@
 import { BoardState } from '../../utils/types';
-import { fetchBoardById } from '../thunks';
+import { createBoard, fetchBoardById } from '../thunks';
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState: BoardState = {
@@ -25,6 +25,18 @@ const boardSlice = createSlice({
       }),
       builder.addCase(fetchBoardById.fulfilled, (state, action) => {
         state.board = action.payload;
+        state.status = 'success';
+        state.error = '';
+      }),
+      builder.addCase(createBoard.pending, (state) => {
+        state.status = 'loading';
+        state.error = '';
+      }),
+      builder.addCase(createBoard.rejected, (state, action) => {
+        state.status = 'error';
+        state.error = action.payload as string;
+      }),
+      builder.addCase(createBoard.fulfilled, (state) => {
         state.status = 'success';
         state.error = '';
       });
