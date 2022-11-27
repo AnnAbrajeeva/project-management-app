@@ -8,11 +8,11 @@ import { fetchBoards, getUsers } from 'redux/thunks';
 import Loader from 'components/Loader';
 import { Board } from 'utils/types';
 import BoardModal from './BoardModal';
-import { setModal } from 'redux/slices/boardsSlice';
+import { setModal } from 'redux/slices/boardSlice';
 
 function BoardsContainer() {
   const dispatch = useDispatch<AppDispatch>();
-  const { status, boards } = useSelector((state: RootState) => state.boards);
+  const { status, boards } = useSelector((state: RootState) => state.board);
 
   useEffect(() => {
     dispatch(fetchBoards());

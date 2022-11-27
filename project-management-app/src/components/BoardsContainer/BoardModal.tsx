@@ -5,14 +5,14 @@ import { Controller, FieldValues, SubmitHandler, useForm } from 'react-hook-form
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from 'redux/store';
 import { BoardData, CreateBoardProps } from 'utils/types';
-import { setModal } from 'redux/slices/boardsSlice';
+import { setModal } from 'redux/slices/boardSlice';
 import { createBoard } from 'redux/thunks';
 
 const BoardModal = () => {
   const dispatch = useDispatch<AppDispatch>();
   const users = useSelector((state: RootState) => state.users.users);
   const user = useSelector((state: RootState) => state.user.user);
-  const openModal = useSelector((state: RootState) => state.boards.modal);
+  const openModal = useSelector((state: RootState) => state.board.modal);
 
   const {
     handleSubmit,
@@ -41,7 +41,6 @@ const BoardModal = () => {
   };
 
   const onSubmit = (data: CreateBoardProps) => {
-    console.log(data);
     dispatch(createBoard(data));
   };
 
@@ -49,7 +48,7 @@ const BoardModal = () => {
     if (user) {
       onSubmit({
         title: data.title,
-        owner: user?._id,
+        owner: user?.id,
         users: data.users,
       });
       reset();

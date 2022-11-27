@@ -17,7 +17,6 @@ export const api = axios.create({
 
 api.interceptors.request.use((config) => {
   const token = getFromLocal('token');
-  console.log(token);
   if (!config.headers) config.headers = {};
   if (config.headers && token) {
     config.headers.Authorization = `Bearer ${token}`;

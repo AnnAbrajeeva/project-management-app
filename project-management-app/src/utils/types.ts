@@ -44,9 +44,11 @@ export interface BoardsState {
 }
 
 export interface BoardState {
+  boards: Board[];
   board: Board | null;
   status: 'loading' | 'error' | 'success';
   error: string;
+  modal: boolean;
 }
 
 export interface ColumnsState {
@@ -211,8 +213,15 @@ export interface User {
   login: string;
 }
 
+export interface UserOptions {
+  id: string;
+  login: string;
+  iat: number;
+  exp: number;
+}
+
 export interface UserState {
-  user: User | null;
+  user: UserOptions | null;
   status: 'loading' | 'error' | 'success' | '';
   error: unknown;
   newUser: NewUser | null;

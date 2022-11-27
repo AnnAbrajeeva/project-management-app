@@ -103,6 +103,18 @@ export const createBoard = createAsyncThunk(
   }
 );
 
+export const deleteBoard = createAsyncThunk(
+  'board/deleteBoard',
+  async (id: string, { rejectWithValue }) => {
+    try {
+      const res = await api.delete(`/boards/${id}`);
+      return res.data;
+    } catch (error) {
+      return rejectWithValue('Could not delete this board. Please, try again later.');
+    }
+  }
+);
+
 export const getUsers = createAsyncThunk('users/getUsers', async (_, { rejectWithValue }) => {
   try {
     const res = await api.get(`/users`);

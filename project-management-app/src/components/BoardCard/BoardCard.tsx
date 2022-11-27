@@ -5,8 +5,16 @@ import style from './BoardCard.module.scss';
 import { Link } from 'react-router-dom';
 import { BoardCardProps } from 'utils/types';
 import { getIndex } from 'utils/getIndex';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from 'redux/store';
+import { deleteBoard } from 'redux/thunks';
 
 function BoardCard({ board, index }: BoardCardProps) {
+  const dispatch = useDispatch<AppDispatch>();
+
+  function removeBoard() {
+    dispatch(deleteBoard(board._id));
+  }
   return (
     <div className={style.card}>
       <div className={style.box}>
@@ -19,7 +27,7 @@ function BoardCard({ board, index }: BoardCardProps) {
               <EditIcon />
             </div>
             <div className={style.delete}>
-              <DeleteIcon />
+              <DeleteIcon onClick={removeBoard} />
             </div>
           </div>
         </div>
