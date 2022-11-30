@@ -5,6 +5,10 @@ import {
   NewUser,
   UserLogin,
   CreateBoardProps,
+  UpdateBoardProps,
+  DeleteColumnProps,
+  DeleteTaskProps,
+  CreateTaskProps,
 } from './../utils/types';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
@@ -67,6 +71,18 @@ export const updateColumn = createAsyncThunk(
   }
 );
 
+export const deleteColumn = createAsyncThunk(
+  'columns/deleteColumn',
+  async ({ boardId, columnId }: DeleteColumnProps, { rejectWithValue }) => {
+    try {
+      const res = await api.delete(`/boards/${boardId}/columns/${columnId}`);
+      return res.data;
+    } catch (error) {
+      return rejectWithValue('Could not delete column of this board. Please, try again later.');
+    }
+  }
+);
+
 export const fetchTasks = createAsyncThunk(
   'tasks/fetchTasks',
   async ({ id, columnId }: FetchTasksProps, { rejectWithValue }) => {
@@ -81,12 +97,38 @@ export const fetchTasks = createAsyncThunk(
 
 export const createTask = createAsyncThunk(
   'task/createTask',
-  async ({ id, title, order }: CreateColumnProps, { rejectWithValue }) => {
+  async ({ boardId, columnId, task }: CreateTaskProps, { rejectWithValue }) => {
     try {
-      const res = await api.post(`/boards/${id}/columns`, { title, order });
+      const res = await api.post(`/boards/${boardId}/columns/${columnId}/tasks`, task);
       return res.data;
     } catch (error) {
-      return rejectWithValue('Could not fetch columns of this board. Please, try again later.');
+      return rejectWithValue('Could not create task this board. Please, try again later.');
+    }
+  }
+);
+
+export const editTask = createAsyncThunk(
+  'task/editTask',
+  async ({ boardId, columnId, task }: CreateTaskProps, { rejectWithValue }) => {
+    try {
+      const res = await api.put(`/boards/${boardId}/columns/${columnId}/tasks`, task);
+      return res.data;
+    } catch (error) {
+      return rejectWithValue('Could not change this task in this board. Please, try again later.');
+    }
+  }
+);
+
+export const deleteTask = createAsyncThunk(
+  'task/deleteTask',
+  async ({ boardId, columnId, taskId }: DeleteTaskProps, { rejectWithValue }) => {
+    try {
+      const res = await api.delete(`/boards/${boardId}/columns/${columnId}/tasks/${taskId}`);
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(
+        'Could not delete tasks in this column of this board. Please, try again later.'
+      );
     }
   }
 );
@@ -99,6 +141,18 @@ export const createBoard = createAsyncThunk(
       return res.data;
     } catch (error) {
       return rejectWithValue('Could not create this board. Please, try again later.');
+    }
+  }
+);
+
+export const updateBoard = createAsyncThunk(
+  'board/updateBoard',
+  async ({ board, id }: UpdateBoardProps, { rejectWithValue }) => {
+    try {
+      const res = await api.put(`/boards/${id}`, board);
+      return res.data;
+    } catch (error) {
+      return rejectWithValue('Could not update this board. Please, try again later.');
     }
   }
 );

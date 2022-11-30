@@ -53,7 +53,7 @@ function LoginForm() {
           view: 'error',
         })
       );
-    } else if (status === 'success') {
+    } else if (status === 'success' && token) {
       reset();
       setToLocalStorage('token', token);
       const user = getUserParams();
@@ -62,7 +62,7 @@ function LoginForm() {
       dispatch(removeNewUser());
       navigate('/');
     }
-  }, [status]);
+  }, [status, token]);
 
   if (isAuth) {
     return <Navigate to="/" />;

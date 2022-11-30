@@ -12,7 +12,6 @@
   box-shadow: 20px 20px 40px -6px rgba(0, 0, 0, 0.2);
   text-align: center;
   transition: all 0.2s ease-in-out;
-  overflow-x: auto;
 
   @media (max-width: 500px) {
     & {
@@ -34,6 +33,10 @@
   &::-webkit-scrollbar-thumb {
     border-radius: 10px;
     background: linear-gradient(180deg, #00c6fb, #005bea);
+  }
+
+  [data-rbd-draggable-id] {
+    top: auto !important;
   }
 }
 

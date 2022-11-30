@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { Container } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -13,8 +13,10 @@ import style from './Header.module.scss';
 import { Box, Divider, Drawer } from '@mui/material';
 import NavLinks from './NavLinks';
 import DrawerMenu from './DrawerMenu';
+import { useState } from 'react';
+import { HeaderProps } from 'utils/types';
 
-function Header() {
+function Header({ location }: HeaderProps) {
   const scrollTrigger = useScrollTrigger({
     disableHysteresis: true,
     threshold: 0,
@@ -27,6 +29,17 @@ function Header() {
     color: scrollTrigger ? '#000' : '#fff',
     flex: '0 0 auto',
   };
+
+  const [hide, setHide] = useState(true);
+
+  useEffect(() => {
+    const hideHeaderPaths = ['/welcome', '/login', '/registration'];
+    if (hideHeaderPaths.includes(location)) {
+      setHide(true);
+    } else {
+      setHide(false);
+    }
+  }, [location]);
 
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -53,46 +66,50 @@ function Header() {
 
   return (
     <>
-      <AppBar position="sticky" style={styleHeader} component="nav">
-        <Container>
-          <Toolbar>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
-              sx={{ mr: 2, display: { sm: 'none' } }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Link className={style.logo} to="/">
-              <Avatar sx={{ mr: 1, cursor: 'pointer' }} alt="Logo" src={Logo} />
+      {!hide && (
+        <>
+          <AppBar position="sticky" style={styleHeader} component="nav">
+            <Container>
+              <Toolbar>
+                <IconButton
+                  color="inherit"
+                  aria-label="open drawer"
+                  edge="start"
+                  onClick={handleDrawerToggle}
+                  sx={{ mr: 2, display: { sm: 'none' } }}
+                >
+                  <MenuIcon />
+                </IconButton>
+                <Link className={style.logo} to="/">
+                  <Avatar sx={{ mr: 1, cursor: 'pointer' }} alt="Logo" src={Logo} />
 
-              <Typography variant="h6" component="div">
-                TaskMaster
-              </Typography>
-            </Link>
-            <NavLinks />
-          </Toolbar>
-        </Container>
-      </AppBar>
-      <Box component="nav">
-        <Drawer
-          container={container}
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
-          }}
-          sx={{
-            display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-          }}
-        >
-          {drawer}
-        </Drawer>
-      </Box>
+                  <Typography variant="h6" component="div">
+                    TaskMaster
+                  </Typography>
+                </Link>
+                <NavLinks />
+              </Toolbar>
+            </Container>
+          </AppBar>
+          <Box component="nav">
+            <Drawer
+              container={container}
+              variant="temporary"
+              open={mobileOpen}
+              onClose={handleDrawerToggle}
+              ModalProps={{
+                keepMounted: true,
+              }}
+              sx={{
+                display: { xs: 'block', sm: 'none' },
+                '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+              }}
+            >
+              {drawer}
+            </Drawer>
+          </Box>
+        </>
+      )}
     </>
   );
 }

@@ -1,5 +1,5 @@
 import { BoardState } from '../../utils/types';
-import { createBoard, deleteBoard, fetchBoardById, fetchBoards } from '../thunks';
+import { createBoard, deleteBoard, fetchBoardById, fetchBoards, updateBoard } from '../thunks';
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState: BoardState = {
@@ -8,6 +8,7 @@ const initialState: BoardState = {
   status: 'loading',
   error: '',
   modal: false,
+  editBoard: null,
 };
 
 const boardSlice = createSlice({
@@ -16,6 +17,9 @@ const boardSlice = createSlice({
   reducers: {
     setModal(state, action) {
       state.modal = action.payload;
+    },
+    setEditBoard(state, action) {
+      state.editBoard = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -62,6 +66,22 @@ const boardSlice = createSlice({
         state.status = 'success';
         state.error = '';
       }),
+      builder.addCase(updateBoard.pending, (state) => {
+        state.status = 'loading';
+        state.error = '';
+      }),
+      builder.addCase(updateBoard.rejected, (state, action) => {
+        state.status = 'error';
+        state.error = action.payload as string;
+      }),
+      builder.addCase(updateBoard.fulfilled, (state, action) => {
+        const newArr = state.boards.map((board) =>
+          board._id !== action.payload._id ? board : action.payload
+        );
+        state.boards = [...newArr];
+        state.status = 'success';
+        state.error = '';
+      }),
       builder.addCase(deleteBoard.pending, (state) => {
         state.status = 'loading';
         state.error = '';
@@ -78,5 +98,5 @@ const boardSlice = createSlice({
   },
 });
 
-export const { setModal } = boardSlice.actions;
+export const { setModal, setEditBoard } = boardSlice.actions;
 export default boardSlice.reducer;

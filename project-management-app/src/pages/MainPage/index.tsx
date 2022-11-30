@@ -1,18 +1,27 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Container, Paper } from '@mui/material';
 import BoardsContainer from 'components/BoardsContainer/BoardsContainer';
 import BoardsPageHeader from 'components/BoardsPageHeader';
 import style from './MainPage.module.scss';
 import ErrorBoundary from 'components/ErrorBoundary/ErrorBoundary';
 import { getFromLocal } from 'utils/localStorage';
-import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { setOpen } from 'redux/slices/snackbarSlice';
 
 function MainPage() {
-  const isAuth = getFromLocal('token');
+  const navigate = useNavigate();
 
-  if (!isAuth) {
-    return <Navigate to="/welcome" />;
-  }
+  useEffect(() => {
+    const isAuth = getFromLocal('token');
+    if (!isAuth) {
+      setOpen({
+        open: true,
+        message: 'Время действия токена истекло.',
+        view: 'error',
+      });
+      navigate('/welcome');
+    }
+  }, []);
 
   return (
     <div className={style.main}>

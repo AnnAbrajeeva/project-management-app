@@ -14,6 +14,10 @@ export interface EmptyBoardProps {
   action: () => void;
 }
 
+export interface HeaderProps {
+  location: string;
+}
+
 export interface ErrorBoundaryProps {
   children: ReactNode;
 }
@@ -27,6 +31,7 @@ export interface ModalProps {
   title: string;
   handleSubmit: UseFormHandleSubmit<ColumnData>;
   formSubmit: SubmitHandler<FieldValues>;
+  loading: string;
 }
 
 export interface Board {
@@ -49,10 +54,12 @@ export interface BoardState {
   status: 'loading' | 'error' | 'success';
   error: string;
   modal: boolean;
+  editBoard: Board | null;
 }
 
 export interface ColumnsState {
   columns: Column[];
+  column: Column | null;
   status: 'loading' | 'error' | 'success';
   error: string;
 }
@@ -102,6 +109,7 @@ export interface CreateColumnProps {
 
 export interface ColumnProps {
   column: Column;
+  index: number;
 }
 
 export interface UpdateColumnProps {
@@ -112,6 +120,7 @@ export interface UpdateColumnProps {
 }
 
 export interface TasksState {
+  task: Task | null;
   tasks: Task[];
   status: 'loading' | 'error' | 'success';
   error: string;
@@ -153,6 +162,8 @@ export interface FetchTasksProps {
 
 export interface BoardTaskProps {
   task: Task;
+  selected: (task: Task) => void;
+  index: number;
 }
 
 export interface ModalFormProps {
@@ -171,8 +182,17 @@ export interface ModalFormProps {
   control: Control<TaskData, unknown>;
 }
 
+export interface TaskModalProps {
+  open: boolean;
+  handleClose: () => void;
+  tasks: Task[];
+  board: Board;
+  columnId: string;
+  task?: Task | null;
+}
+
 export interface CreateTaskProps {
-  id: string;
+  boardId: string;
   columnId: string;
   task: {
     title: string;
@@ -240,4 +260,43 @@ export interface SnackProps {
   open: boolean;
   message: string;
   variant: 'error' | 'success';
+}
+
+export interface BoardModalProps {
+  board?: Board;
+}
+
+export interface UpdateBoardProps {
+  board: CreateBoardProps;
+  id: string;
+}
+
+export interface ColumnModalProps {
+  open: boolean;
+  handleClose: () => void;
+}
+
+export interface ConfirmModalProps {
+  showConfirm: boolean;
+  handleClose: () => void;
+  action: () => void;
+  title: string;
+  loading: string;
+}
+
+export interface DeleteColumnProps {
+  boardId: string;
+  columnId: string;
+}
+
+export interface DeleteTaskProps {
+  boardId: string;
+  columnId: string;
+  taskId: string;
+}
+
+export interface TaskDescrModalProps {
+  task: Task;
+  open: boolean;
+  handleClose: () => void;
 }

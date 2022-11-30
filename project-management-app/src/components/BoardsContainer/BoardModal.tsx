@@ -1,18 +1,32 @@
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { FormControl, InputLabel, MenuItem, OutlinedInput, Select, TextField } from '@mui/material';
 import Modal from 'components/Modal';
 import { Controller, FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from 'redux/store';
-import { BoardData, CreateBoardProps } from 'utils/types';
-import { setModal } from 'redux/slices/boardSlice';
-import { createBoard } from 'redux/thunks';
+import { BoardData, CreateBoardProps, BoardModalProps } from 'utils/types';
+import { setEditBoard, setModal } from 'redux/slices/boardSlice';
+import { createBoard, updateBoard } from 'redux/thunks';
+import { setOpen } from 'redux/slices/snackbarSlice';
 
 const BoardModal = () => {
   const dispatch = useDispatch<AppDispatch>();
   const users = useSelector((state: RootState) => state.users.users);
   const user = useSelector((state: RootState) => state.user.user);
-  const openModal = useSelector((state: RootState) => state.board.modal);
+  const { modal, editBoard, status, error } = useSelector((state: RootState) => state.board);
+
+  useEffect(() => {
+    const defaultValues: { title: string; users: string[] } = {
+      title: '',
+      users: [],
+    };
+    if (editBoard) {
+      defaultValues.title = editBoard.title;
+      defaultValues.users = editBoard.users;
+    }
+
+    reset({ ...defaultValues });
+  }, [editBoard]);
 
   const {
     handleSubmit,
@@ -21,15 +35,16 @@ const BoardModal = () => {
     reset,
     control,
   } = useForm<BoardData>({
-    defaultValues: {
-      title: '',
-      users: [],
-    },
+    defaultValues: editBoard || {},
     mode: 'onChange',
   });
 
   function handleClose() {
     dispatch(setModal(false));
+    if (editBoard) {
+      reset();
+      dispatch(setEditBoard(null));
+    }
   }
 
   const registerOptions = {
@@ -41,7 +56,55 @@ const BoardModal = () => {
   };
 
   const onSubmit = (data: CreateBoardProps) => {
-    dispatch(createBoard(data));
+    if (!editBoard) {
+      dispatch(createBoard(data));
+      if (status === 'error') {
+        dispatch(
+          setOpen({
+            open: true,
+            message: error,
+            view: 'error',
+          })
+        );
+      }
+      if (status === 'success') {
+        reset();
+        handleClose();
+        dispatch(
+          setOpen({
+            open: true,
+            message: 'Доска успешно создана!',
+            view: 'success',
+          })
+        );
+      }
+    } else {
+      const newData = {
+        board: data,
+        id: editBoard._id,
+      };
+      dispatch(updateBoard(newData));
+      if (status === 'error') {
+        dispatch(
+          setOpen({
+            open: true,
+            message: error,
+            view: 'error',
+          })
+        );
+      }
+      if (status === 'success') {
+        reset();
+        handleClose();
+        dispatch(
+          setOpen({
+            open: true,
+            message: 'Доска обновлена!',
+            view: 'success',
+          })
+        );
+      }
+    }
   };
 
   const formSubmit: SubmitHandler<FieldValues> = (data) => {
@@ -58,11 +121,12 @@ const BoardModal = () => {
 
   return (
     <Modal
-      open={openModal}
+      open={modal}
       handleSubmit={handleSubmit}
       handleClose={handleClose}
       formSubmit={formSubmit}
       title="Добавить доску"
+      loading={status}
     >
       <TextField
         fullWidth

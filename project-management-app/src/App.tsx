@@ -1,5 +1,5 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material';
 import MainPage from './pages/MainPage';
 import Header from './components/Header';
@@ -11,6 +11,10 @@ import NotFound from 'pages/NotFound';
 import LoginPage from 'pages/LoginPage';
 import AuthPage from 'pages/AuthPage';
 import Toast from 'components/Toast/Toast';
+import { useDispatch } from 'react-redux';
+import { removeUser } from 'redux/slices/userSlice';
+import { removeFromLocal } from 'utils/localStorage';
+import AuthVerify from 'common/AuthVerify';
 
 const theme = createTheme({
   typography: {
@@ -19,9 +23,19 @@ const theme = createTheme({
 });
 
 function App() {
+  const dispatch = useDispatch();
+  const location = useLocation();
+
+  const logOut = useCallback(() => {
+    dispatch(removeUser());
+    removeFromLocal('token');
+    removeFromLocal('user');
+    return <Navigate to={'/welcome'} />;
+  }, [dispatch]);
+
   return (
     <ThemeProvider theme={theme}>
-      {window.location.pathname !== ('/welcome' || '/sign-in') && <Header />}
+      <Header location={location.pathname} />
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/login" element={<LoginPage />} />
@@ -32,6 +46,7 @@ function App() {
       </Routes>
       <Footer />
       <Toast />
+      <AuthVerify logOut={logOut} />
     </ThemeProvider>
   );
 }
