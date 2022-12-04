@@ -9,6 +9,8 @@ import {
   DeleteColumnProps,
   DeleteTaskProps,
   CreateTaskProps,
+  Column,
+  TaskOrderProps,
 } from './../utils/types';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
@@ -71,6 +73,18 @@ export const updateColumn = createAsyncThunk(
   }
 );
 
+export const updateColumnOrder = createAsyncThunk(
+  'columns/updateColumnOrder',
+  async (columns: { _id: string; order: number }[], { rejectWithValue }) => {
+    try {
+      const res = await api.patch(`/columnsSet`, columns);
+      return res.data;
+    } catch (error) {
+      return rejectWithValue('Could not update column of this board. Please, try again later.');
+    }
+  }
+);
+
 export const deleteColumn = createAsyncThunk(
   'columns/deleteColumn',
   async ({ boardId, columnId }: DeleteColumnProps, { rejectWithValue }) => {
@@ -84,7 +98,7 @@ export const deleteColumn = createAsyncThunk(
 );
 
 export const fetchTasks = createAsyncThunk(
-  'tasks/fetchTasks',
+  'column/fetchTasks',
   async ({ id, columnId }: FetchTasksProps, { rejectWithValue }) => {
     try {
       const res = await api.get(`/boards/${id}/columns/${columnId}/tasks`);
@@ -96,7 +110,7 @@ export const fetchTasks = createAsyncThunk(
 );
 
 export const createTask = createAsyncThunk(
-  'task/createTask',
+  'column/createTask',
   async ({ boardId, columnId, task }: CreateTaskProps, { rejectWithValue }) => {
     try {
       const res = await api.post(`/boards/${boardId}/columns/${columnId}/tasks`, task);
@@ -108,10 +122,10 @@ export const createTask = createAsyncThunk(
 );
 
 export const editTask = createAsyncThunk(
-  'task/editTask',
-  async ({ boardId, columnId, task }: CreateTaskProps, { rejectWithValue }) => {
+  'column/editTask',
+  async ({ boardId, columnId, taskId, task }: CreateTaskProps, { rejectWithValue }) => {
     try {
-      const res = await api.put(`/boards/${boardId}/columns/${columnId}/tasks`, task);
+      const res = await api.put(`/boards/${boardId}/columns/${columnId}/tasks/${taskId}`, task);
       return res.data;
     } catch (error) {
       return rejectWithValue('Could not change this task in this board. Please, try again later.');
@@ -119,8 +133,23 @@ export const editTask = createAsyncThunk(
   }
 );
 
+export const updateOrderTask = createAsyncThunk(
+  'column/updateOrderTask',
+  async (
+    { columnId, tasks }: { columnId: string; tasks: TaskOrderProps[] },
+    { rejectWithValue }
+  ) => {
+    try {
+      const res = await api.patch(`/tasksSet`, tasks);
+      return { columnId: columnId, tasks: res.data };
+    } catch (error) {
+      return rejectWithValue('Could not change this task in this board. Please, try again later.');
+    }
+  }
+);
+
 export const deleteTask = createAsyncThunk(
-  'task/deleteTask',
+  'column/deleteTask',
   async ({ boardId, columnId, taskId }: DeleteTaskProps, { rejectWithValue }) => {
     try {
       const res = await api.delete(`/boards/${boardId}/columns/${columnId}/tasks/${taskId}`);

@@ -5,12 +5,13 @@ import { Controller, FieldValues, SubmitHandler, useForm } from 'react-hook-form
 import { useDispatch, useSelector } from 'react-redux';
 import { setOpen } from 'redux/slices/snackbarSlice';
 import { AppDispatch, RootState } from 'redux/store';
-import { createTask } from 'redux/thunks';
+import { createTask, editTask } from 'redux/thunks';
 import { CreateTaskProps, TaskData, TaskModalProps } from 'utils/types';
 
 function TaskModal({ open, handleClose, tasks, board, columnId, task }: TaskModalProps) {
   const users = useSelector((state: RootState) => state.users.users);
-  const { error, status } = useSelector((state: RootState) => state.tasks);
+  const user = useSelector((state: RootState) => state.user.user);
+  const { error, status } = useSelector((state: RootState) => state.columns);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
@@ -48,13 +49,24 @@ function TaskModal({ open, handleClose, tasks, board, columnId, task }: TaskModa
       title: data.title,
       order: tasks.length + 1,
       description: data.description,
-      userId: 1,
+      userId: user!.id,
       users: data.users,
     };
+
+    const updatedTask = {
+      title: data.title,
+      order: task?.order || tasks.length + 1,
+      description: data.description,
+      columnId: task?.columnId || '',
+      userId: task?.userId || '',
+      users: data.users,
+    };
+
     onSubmit({
       boardId: board._id,
       columnId: columnId,
-      task: newTask,
+      taskId: task ? task._id : '',
+      task: !task ? newTask : updatedTask,
     });
   };
 
@@ -76,8 +88,12 @@ function TaskModal({ open, handleClose, tasks, board, columnId, task }: TaskModa
   const responsibles = board.users.length ? board.users : users;
   const message = task ? 'Таск изменён!' : 'Таск успешно создан!';
 
-  const onSubmit = (data: CreateTaskProps) => {
-    dispatch(createTask(data));
+  const onSubmit = async (data: CreateTaskProps) => {
+    if (task) {
+      await dispatch(editTask(data));
+    } else {
+      await dispatch(createTask(data));
+    }
     if (status === 'error') {
       dispatch(
         setOpen({

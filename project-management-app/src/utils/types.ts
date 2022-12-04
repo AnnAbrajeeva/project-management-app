@@ -80,6 +80,7 @@ export interface Column {
   title: string;
   order: number;
   boardId: string;
+  tasks?: Task[];
 }
 
 export interface BoardsPageHeaderProps {
@@ -194,12 +195,16 @@ export interface TaskModalProps {
 export interface CreateTaskProps {
   boardId: string;
   columnId: string;
+  taskId: string;
   task: {
     title: string;
     order: number;
     description: string;
-    userId: number;
+    userId: string;
     users: string[];
+    boardId?: string;
+    columnId?: string;
+    _id?: string;
   };
 }
 
@@ -299,4 +304,10 @@ export interface TaskDescrModalProps {
   task: Task;
   open: boolean;
   handleClose: () => void;
+}
+
+export interface TaskOrderProps {
+  _id: string;
+  order: number;
+  columnId: string;
 }

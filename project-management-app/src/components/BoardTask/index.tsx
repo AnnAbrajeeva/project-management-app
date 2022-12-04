@@ -23,7 +23,8 @@ function BoardTask({ task, selected, index }: BoardTaskProps) {
   const [showDescr, setShoWDescr] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
-  const { error, status } = useSelector((state: RootState) => state.tasks);
+  const { error, status } = useSelector((state: RootState) => state.columns);
+  const { users } = useSelector((state: RootState) => state.users);
 
   function handleShowDescr() {
     setShoWDescr(true);
@@ -68,8 +69,11 @@ function BoardTask({ task, selected, index }: BoardTaskProps) {
     }
   }
 
+  const allUsers = users.map((user) => user.name);
+  const usersArr = !task.users.length ? allUsers : task.users;
+
   return (
-    <Draggable draggableId={task._id} index={index}>
+    <Draggable draggableId={task._id} key={task._id} index={index}>
       {(provided) => (
         <Paper sx={{ backgroundColor: 'transparent' }}>
           <Card
@@ -101,7 +105,7 @@ function BoardTask({ task, selected, index }: BoardTaskProps) {
                 </div>
               </Tooltip>
               <div className={style.users}>
-                {task.users.map((user, i) => {
+                {usersArr.map((user, i) => {
                   return (
                     <Tooltip title={user} key={i}>
                       <div className={style.user}>

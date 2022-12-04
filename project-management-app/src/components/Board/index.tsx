@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import BoardTask from 'components/BoardTask';
 import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
@@ -7,32 +7,25 @@ import CheckIcon from '@mui/icons-material/Check';
 import { Button, Tooltip, TextField } from '@mui/material';
 import { ColumnProps, Task } from 'utils/types';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchTasks, updateColumn, deleteColumn, deleteTask } from 'redux/thunks';
+import { updateColumn, deleteColumn, deleteTask } from 'redux/thunks';
 import { AppDispatch, RootState } from 'redux/store';
 import TaskModal from './TaskModal';
 import ConfirmModal from 'components/ConfirmModal/ConfirmModal';
 import { setOpen } from '../../redux/slices/snackbarSlice';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
+import Loader from 'components/Loader';
 
 function Board({ column, index }: ColumnProps) {
   const [edit, setEdit] = useState(false);
   const [title, setTitle] = useState(column.title);
   const [open, setModalShow] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [editTask, setEditTask] = useState<Task>();
   const dispatch = useDispatch<AppDispatch>();
   const board = useSelector((state: RootState) => state.board.board);
-  const { tasks, status: taskStatus } = useSelector((state: RootState) => state.tasks);
+  const [editTask, setEditTask] = useState<Task>();
   const { error, status } = useSelector((state: RootState) => state.columns);
 
-  useEffect(() => {
-    if (board?._id) {
-      dispatch(fetchTasks({ id: board?._id, columnId: column._id }));
-    }
-  }, [dispatch, board?._id, column._id]);
-
   const errorInput = title ? false : true;
-  const columnTasks = tasks.filter((task) => task.columnId === column._id);
 
   function changeTitle() {
     if (board && title) {
@@ -79,16 +72,16 @@ function Board({ column, index }: ColumnProps) {
 
   async function removeColumn() {
     if (board) {
-      await dispatch(deleteColumn({ boardId: board?._id, columnId: column._id }));
-      if (tasks.length) {
+      if (column.tasks && column.tasks.length) {
         Promise.all(
-          tasks.map((task) =>
+          column.tasks.map((task) =>
             dispatch(deleteTask({ boardId: board._id, columnId: column._id, taskId: task._id }))
           )
         );
       }
+      await dispatch(deleteColumn({ boardId: board?._id, columnId: column._id }));
 
-      if (status === 'error' || taskStatus === 'error') {
+      if (status === 'error') {
         dispatch(
           setOpen({
             open: true,
@@ -97,7 +90,7 @@ function Board({ column, index }: ColumnProps) {
           })
         );
       }
-      if (status === 'success' && taskStatus === 'success') {
+      if (status === 'success') {
         closeConfirmModal();
         dispatch(
           setOpen({
@@ -109,6 +102,8 @@ function Board({ column, index }: ColumnProps) {
       }
     }
   }
+
+  console.log(column.tasks);
 
   return (
     <>
@@ -149,22 +144,33 @@ function Board({ column, index }: ColumnProps) {
                 </div>
               )}
             </div>
-            <Droppable droppableId={column._id}>
-              {(provided) => (
-                <div
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
-                  className={style.board__content}
-                >
-                  {columnTasks.map((task, i) => {
-                    return (
-                      <BoardTask selected={selectEditTask} task={task} key={task._id} index={i} />
-                    );
-                  })}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
+            {status === 'loading' ? (
+              <Loader />
+            ) : (
+              <Droppable droppableId={column._id}>
+                {(provided) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                    className={style.board__content}
+                  >
+                    {column.tasks && column.tasks.length
+                      ? column.tasks.map((task, i) => {
+                          return (
+                            <BoardTask
+                              selected={selectEditTask}
+                              task={task}
+                              key={task._id}
+                              index={i}
+                            />
+                          );
+                        })
+                      : null}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            )}
             <Button
               sx={{ color: '#fff', borderColor: '#fff' }}
               variant="outlined"
@@ -179,7 +185,7 @@ function Board({ column, index }: ColumnProps) {
       <TaskModal
         open={open}
         handleClose={handleClose}
-        tasks={tasks}
+        tasks={column.tasks || []}
         board={board!}
         columnId={column._id}
         task={editTask}

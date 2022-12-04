@@ -50,9 +50,11 @@ function TaskDescrModal({ task, open, handleClose }: TaskDescrModalProps) {
           <div>
             <h3>Исполнители:</h3>
             <ol className={style.list}>
-              {task.users.map((user, i) => {
-                return <li key={i}>{user}</li>;
-              })}
+              {task.users &&
+                task.users.length > 0 &&
+                task.users.map((user, i) => {
+                  return <li key={i}>{user}</li>;
+                })}
             </ol>
           </div>
           <div>
