@@ -1,0 +1,18 @@
+.close {
+  position: absolute;
+  cursor: pointer;
+  top: 10px;
+  right: 10px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    color: rgb(114, 221, 248);
+    transform: rotate(360deg);
+  }
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
