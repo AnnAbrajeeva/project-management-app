@@ -1,5 +1,6 @@
 import { Button, ButtonGroup } from '@mui/material';
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './styles.css';
 
 function Welcome() {
@@ -7,8 +8,12 @@ function Welcome() {
     <div className="welcome">
       <div className="welcome-header">
         <ButtonGroup>
-          <Button>Sign In</Button>
-          <Button>Sign Up</Button>
+          <Button>
+            <Link to={'/login'}>LogIn</Link>
+          </Button>
+          <Button>
+            <Link to={'/registration'}>Registration</Link>
+          </Button>
         </ButtonGroup>
       </div>
       <div className="welcome-main">

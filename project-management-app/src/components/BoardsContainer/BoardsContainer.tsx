@@ -1,38 +1,46 @@
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from 'redux/store';
 import { Grid } from '@mui/material';
 import BoardCard from 'components/BoardCard/BoardCard';
 import EmptyBoard from '../BoardInfo/EmptyBoard';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { fetchBoards, getUsers } from 'redux/thunks';
+import Loader from 'components/Loader';
+import { Board } from 'utils/types';
+import BoardModal from './BoardModal';
+import { setModal } from 'redux/slices/boardSlice';
 
 function BoardsContainer() {
+  const dispatch = useDispatch<AppDispatch>();
+  const { status, boards } = useSelector((state: RootState) => state.board);
+
+  useEffect(() => {
+    dispatch(fetchBoards());
+    dispatch(getUsers());
+  }, [dispatch]);
+
+  if (status === 'loading') {
+    return <Loader />;
+  }
+
+  function openModal() {
+    dispatch(setModal(true));
+  }
+
   return (
     <Grid container sx={{ position: 'relative' }}>
-      <Grid item xs={12} md={6} lg={4}>
-        <BoardCard />
-      </Grid>
-      <Grid item xs={12} md={6} lg={4}>
-        <BoardCard />
-      </Grid>
-      <Grid item xs={12} md={6} lg={4}>
-        <BoardCard />
-      </Grid>
-      <Grid item xs={12} md={6} lg={4}>
-        <BoardCard />
-      </Grid>
-      <Grid item xs={12} md={6} lg={4}>
-        <BoardCard />
-      </Grid>
-      <Grid item xs={12} md={6} lg={4}>
-        <BoardCard />
-      </Grid>
-      <Grid item xs={12} md={6} lg={4}>
-        <BoardCard />
-      </Grid>
-      <Grid item xs={12} md={6} lg={4}>
-        <BoardCard />
-      </Grid>
+      {boards.map((board: Board, i) => {
+        return (
+          <Grid key={board._id} item xs={12} md={6} lg={4}>
+            <BoardCard board={board} index={i} />
+          </Grid>
+        );
+      })}
+
       <Grid sx={{ padding: '30px' }} item xs={12} md={6} lg={4}>
-        <EmptyBoard action={() => console.log('board')} text="Добавить доску" />
+        <EmptyBoard action={openModal} text="Добавить доску" />
       </Grid>
+      <BoardModal />
     </Grid>
   );
 }
