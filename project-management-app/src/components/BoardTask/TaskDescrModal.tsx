@@ -36,7 +36,7 @@ function TaskDescrModal({ task, open, handleClose }: TaskDescrModalProps) {
       <div className={style.wrapper}>
         <DialogTitle>
           <p className={style.title}>
-            `${t('task')}: ${task.title}`
+            {t('task')}: {task.title}
           </p>
           <IconButton
             aria-label="close"
