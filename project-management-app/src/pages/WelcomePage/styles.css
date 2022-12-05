@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap');
+
+.welcome {
+  background-image: linear-gradient( 69deg, rgb(31 73 213) 11.4%, rgba(32, 38, 57, 1) 70.2% );
+  flex: 1 0 auto;
+}
+
+.welcome-main {
+  height: calc(100vh - 120px);
+  display: flex;
+  align-items: center;
+  padding: 0 40px;
+}
+
+.welcome-main2 {
+  background-image: linear-gradient( 202deg, rgb(31 73 213) 11.4%, rgba(32, 38, 57, 1) 70.2% );
+  height: calc(100vh - 54px);
+  display: flex;
+  align-items: center;
+  padding: 0 40px;
+}
+
+.welcome-info2 p {
+  order: 2;
+}
+
+.welcome-info2 img {
+  order: 1;
+}
+
+.welcome-header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+  padding: 40px;
+}
+
+.welcome-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 100px;
+}
+
+.welcome-info p {
+  font-family: 'Roboto Slab', serif;
+  font-size: 1.3rem;
+  color: white;
+  text-align: justify;
+  padding: 5px;
+}
+
+.welcome-img {
+  width: 40%;
+  box-shadow: rgba(255, 255, 255, 0.07) 0px 1px 2px, rgba(255, 255, 255, 0.07) 0px 2px 4px,
+    rgba(255, 255, 255, 0.07) 0px 4px 8px, rgba(255, 255, 255, 0.07) 0px 8px 16px,
+    rgba(255, 255, 255, 0.07) 0px 16px 32px, rgba(255, 255, 255, 0.07) 0px 32px 64px;
+  border-radius: 20px;
+}
+
+@media (max-width: 900px) {
+  .welcome-img {
+    width: 70%;
+  }
+  .welcome-info {
+    flex-direction: column-reverse;
+  }
+}
