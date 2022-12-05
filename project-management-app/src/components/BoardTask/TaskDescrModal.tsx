@@ -11,6 +11,7 @@ import React from 'react';
 import { TaskDescrModalProps } from 'utils/types';
 import CloseIcon from '@mui/icons-material/Close';
 import style from './TaskDescr.module.scss';
+import { useTranslation } from 'react-i18next';
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -22,6 +23,8 @@ const Transition = React.forwardRef(function Transition(
 });
 
 function TaskDescrModal({ task, open, handleClose }: TaskDescrModalProps) {
+  const { t } = useTranslation();
+
   return (
     <Dialog
       open={open}
@@ -32,7 +35,9 @@ function TaskDescrModal({ task, open, handleClose }: TaskDescrModalProps) {
     >
       <div className={style.wrapper}>
         <DialogTitle>
-          <p className={style.title}>Task: {task.title}</p>
+          <p className={style.title}>
+            `${t('task')}: ${task.title}`
+          </p>
           <IconButton
             aria-label="close"
             onClick={handleClose}
@@ -48,7 +53,7 @@ function TaskDescrModal({ task, open, handleClose }: TaskDescrModalProps) {
         </DialogTitle>
         <DialogContent dividers>
           <div>
-            <h3>Исполнители:</h3>
+            <h3>{t('users')}:</h3>
             <ol className={style.list}>
               {task.users &&
                 task.users.length > 0 &&
@@ -58,7 +63,7 @@ function TaskDescrModal({ task, open, handleClose }: TaskDescrModalProps) {
             </ol>
           </div>
           <div>
-            <h3>Описание:</h3>
+            <h3>{t('description')}:</h3>
             <p>{task.description}</p>
           </div>
           <DialogContentText id="alert-dialog-slide-description"></DialogContentText>

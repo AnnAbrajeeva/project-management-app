@@ -15,7 +15,6 @@ function BoardPage() {
   const { id } = useParams();
   const dispatch = useDispatch<AppDispatch>();
   const { board, status } = useSelector((state: RootState) => state.board);
-  const { columns } = useSelector((state: RootState) => state.columns);
   const navigate = useNavigate();
 
   useEffect(() => {

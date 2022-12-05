@@ -14,6 +14,7 @@ import { setNewUser } from 'redux/slices/userSlice';
 import { schemaRegistration } from './validation';
 import { setOpen } from 'redux/slices/snackbarSlice';
 import { getFromLocal } from 'utils/localStorage';
+import { useTranslation } from 'react-i18next';
 
 export const MyInput = styled(Input)({
   fieldset: {
@@ -29,6 +30,7 @@ function RegisterForm() {
   const error = useSelector((state: RootState) => state.user.error);
   const navigate = useNavigate();
   const isAuth = getFromLocal('token');
+  const { t } = useTranslation();
 
   const {
     register,
@@ -50,7 +52,7 @@ function RegisterForm() {
   };
 
   function goToLogin(data: NewUser) {
-    const toastMessage = error ? error : 'Вы успешно зарегистрировались!';
+    const toastMessage = error ? error : t('registration_success_message');
     const toastStyle = error ? 'error' : 'success';
     dispatch(setNewUser(data));
     dispatch(
@@ -84,14 +86,14 @@ function RegisterForm() {
         <MyInput
           variant="outlined"
           error={errors.name ? true : false}
-          label="Введите Ваше имя"
+          label={t('enter_your_name')}
           helperText={errors.name?.message}
           {...register('name')}
         />
 
         <MyInput
           variant="outlined"
-          label="Введите Ваш логин"
+          label={t('enter_your_login')}
           error={errors.login ? true : false}
           helperText={errors.login?.message}
           {...register('login')}
@@ -99,7 +101,7 @@ function RegisterForm() {
 
         <MyInput
           variant="outlined"
-          label="Введите Ваш пароль"
+          label={t('enter_your_password')}
           error={errors.password ? true : false}
           helperText={errors.password?.message}
           {...register('password')}
@@ -109,14 +111,14 @@ function RegisterForm() {
         <MyInput
           variant="outlined"
           error={errors.confirmPassword ? true : false}
-          label="Подтвердите пароль"
+          label={t('confirm_pass')}
           helperText={errors.confirmPassword?.message}
           {...register('confirmPassword')}
           type="password"
         />
 
         <p className={style.text}>
-          Уже есть аккаунт? <Link to={'/login'}>Войти</Link>
+          {t('have_account')}? <Link to={'/login'}>{t('logIn')}</Link>
         </p>
         <LoadingButton
           sx={{ p: '8px', fontSize: '18px' }}
@@ -125,7 +127,7 @@ function RegisterForm() {
           type="submit"
           disabled={isDisabled}
         >
-          Регистрация
+          {t('registration')}
         </LoadingButton>
       </form>
     </>

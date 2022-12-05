@@ -27,6 +27,7 @@ const userSlice = createSlice({
     removeUser(state) {
       state.user = null;
       state.token = '';
+      state.error = '';
     },
   },
   extraReducers: (builder) => {

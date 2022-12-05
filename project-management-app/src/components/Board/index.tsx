@@ -14,6 +14,7 @@ import ConfirmModal from 'components/ConfirmModal/ConfirmModal';
 import { setOpen } from '../../redux/slices/snackbarSlice';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 import Loader from 'components/Loader';
+import { useTranslation } from 'react-i18next';
 
 function Board({ column, index }: ColumnProps) {
   const [edit, setEdit] = useState(false);
@@ -24,7 +25,7 @@ function Board({ column, index }: ColumnProps) {
   const board = useSelector((state: RootState) => state.board.board);
   const [editTask, setEditTask] = useState<Task>();
   const { error, status } = useSelector((state: RootState) => state.columns);
-
+  const { t } = useTranslation();
   const errorInput = title ? false : true;
 
   function changeTitle() {
@@ -95,7 +96,7 @@ function Board({ column, index }: ColumnProps) {
         dispatch(
           setOpen({
             open: true,
-            message: 'Колонка успешно удалена',
+            message: t('delColumn_success_message'),
             view: 'success',
           })
         );
@@ -114,7 +115,7 @@ function Board({ column, index }: ColumnProps) {
             className={style.board}
           >
             <div onClick={handleDeleteColumn} className={style.close}>
-              <Tooltip title="Удалить колонку">
+              <Tooltip title={t('delColumn')}>
                 <CloseIcon />
               </Tooltip>
             </div>
@@ -175,7 +176,7 @@ function Board({ column, index }: ColumnProps) {
               startIcon={<AddIcon />}
               onClick={handleClickOpen}
             >
-              Добавить задачу
+              {t('add_task')}
             </Button>
           </div>
         )}
@@ -192,7 +193,7 @@ function Board({ column, index }: ColumnProps) {
         showConfirm={showConfirm}
         handleClose={closeConfirmModal}
         action={removeColumn}
-        title={'Вы действительно хотите удалить колонку со всеми тасками?'}
+        title={t('del_column_with_task')}
         loading={status}
       />
     </>

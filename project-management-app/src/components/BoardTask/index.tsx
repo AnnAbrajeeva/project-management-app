@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from 'redux/store';
 import { setOpen } from 'redux/slices/snackbarSlice';
 import { Draggable } from 'react-beautiful-dnd';
+import { useTranslation } from 'react-i18next';
 
 function BoardTask({ task, selected, index }: BoardTaskProps) {
   const [showDescr, setShoWDescr] = useState(false);
@@ -25,6 +26,7 @@ function BoardTask({ task, selected, index }: BoardTaskProps) {
   const dispatch = useDispatch<AppDispatch>();
   const { error, status } = useSelector((state: RootState) => state.columns);
   const { users } = useSelector((state: RootState) => state.users);
+  const { t } = useTranslation();
 
   function handleShowDescr() {
     setShoWDescr(true);
@@ -62,7 +64,7 @@ function BoardTask({ task, selected, index }: BoardTaskProps) {
       dispatch(
         setOpen({
           open: true,
-          message: 'Таск успешно удалён!',
+          message: t('deleted_task'),
           view: 'success',
         })
       );
@@ -83,7 +85,7 @@ function BoardTask({ task, selected, index }: BoardTaskProps) {
             sx={{ minWidth: 275, overflow: 'visible', position: 'relative' }}
           >
             <div className={style.close}>
-              <Tooltip onClick={removeTask} title="Удалить задачу">
+              <Tooltip onClick={removeTask} title={t('delete_task')}>
                 <CloseIcon />
               </Tooltip>
             </div>
@@ -94,12 +96,12 @@ function BoardTask({ task, selected, index }: BoardTaskProps) {
               </Typography>
             </CardContent>
             <CardActions>
-              <Tooltip onClick={handleShowDescr} title="Посмотреть задачу">
+              <Tooltip onClick={handleShowDescr} title={t('view_task')}>
                 <div className={style.icon}>
                   <RemoveRedEyeIcon />
                 </div>
               </Tooltip>
-              <Tooltip title="Редактировать задачу">
+              <Tooltip title={t('edit_task')}>
                 <div onClick={() => selected(task)} className={style.icon}>
                   <EditIcon />
                 </div>
@@ -123,7 +125,7 @@ function BoardTask({ task, selected, index }: BoardTaskProps) {
             showConfirm={showConfirm}
             handleClose={handleHideConfirm}
             action={removeSelectedTask}
-            title="Вы действительно хотите удалить этот таск?"
+            title={t('del_task_confirm')}
             loading={status}
           />
         </Paper>

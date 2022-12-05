@@ -7,6 +7,7 @@ import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
 import { ConfirmModalProps } from 'utils/types';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { useTranslation } from 'react-i18next';
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -18,6 +19,7 @@ const Transition = React.forwardRef(function Transition(
 });
 
 function ConfirmModal({ showConfirm, handleClose, action, title, loading }: ConfirmModalProps) {
+  const { t } = useTranslation();
   return (
     <Dialog
       open={showConfirm}
@@ -29,7 +31,7 @@ function ConfirmModal({ showConfirm, handleClose, action, title, loading }: Conf
       <DialogTitle>{title}</DialogTitle>
       <DialogActions>
         <Button variant="contained" color="error" onClick={handleClose}>
-          Disagree
+          {t('cancel')}
         </Button>
         <LoadingButton
           loading={loading === 'loading'}
@@ -37,7 +39,7 @@ function ConfirmModal({ showConfirm, handleClose, action, title, loading }: Conf
           color="success"
           onClick={action}
         >
-          Agree
+          OK
         </LoadingButton>
       </DialogActions>
     </Dialog>

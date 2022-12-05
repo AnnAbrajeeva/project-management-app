@@ -11,12 +11,14 @@ import { useDispatch } from 'react-redux';
 import { fetchTasks, updateColumn, updateColumnOrder, updateOrderTask } from 'redux/thunks';
 import { Column, Task } from 'utils/types';
 import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 function BoardInfo() {
   const [open, setOpen] = useState(false);
   const columns = useSelector((state: RootState) => state.columns.columns);
   const [columnsArr, setColumnsArr] = useState(columns);
   const dispatch = useDispatch<AppDispatch>();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const newColumns = [...columns];
@@ -142,7 +144,7 @@ function BoardInfo() {
               })}
 
               {provided.placeholder}
-              <EmptyBoard action={handleClickOpen} text="Добавить колонку" />
+              <EmptyBoard action={handleClickOpen} text={t('add_column')} />
             </div>
           )}
         </Droppable>

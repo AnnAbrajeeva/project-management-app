@@ -9,7 +9,6 @@ import {
   DeleteColumnProps,
   DeleteTaskProps,
   CreateTaskProps,
-  Column,
   TaskOrderProps,
   UpdateUserProps,
 } from './../utils/types';
@@ -253,6 +252,20 @@ export const getUser = createAsyncThunk(
         if (error.response?.status === 404) {
           return rejectWithValue('Пользователь не найден');
         }
+        return rejectWithValue('Ошибка сервера, попробуйте позже');
+      }
+    }
+  }
+);
+
+export const deleteUser = createAsyncThunk(
+  'users/deleteUser',
+  async (id: string, { rejectWithValue }) => {
+    try {
+      const res = await api.delete(`/users/${id}`);
+      return res.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
         return rejectWithValue('Ошибка сервера, попробуйте позже');
       }
     }

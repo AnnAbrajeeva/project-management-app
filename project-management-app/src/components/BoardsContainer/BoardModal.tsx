@@ -8,12 +8,14 @@ import { BoardData, CreateBoardProps, BoardModalProps } from 'utils/types';
 import { setEditBoard, setModal } from 'redux/slices/boardSlice';
 import { createBoard, updateBoard } from 'redux/thunks';
 import { setOpen } from 'redux/slices/snackbarSlice';
+import { useTranslation } from 'react-i18next';
 
 const BoardModal = () => {
   const dispatch = useDispatch<AppDispatch>();
   const users = useSelector((state: RootState) => state.users.users);
   const user = useSelector((state: RootState) => state.user.user);
   const { modal, editBoard, status, error } = useSelector((state: RootState) => state.board);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const defaultValues: { title: string; users: string[] } = {
@@ -73,7 +75,7 @@ const BoardModal = () => {
         dispatch(
           setOpen({
             open: true,
-            message: 'Доска успешно создана!',
+            message: t('createBoard_success_message'),
             view: 'success',
           })
         );
@@ -99,7 +101,7 @@ const BoardModal = () => {
         dispatch(
           setOpen({
             open: true,
-            message: 'Доска обновлена!',
+            message: t('updateBoard_success_message'),
             view: 'success',
           })
         );
@@ -125,7 +127,7 @@ const BoardModal = () => {
       handleSubmit={handleSubmit}
       handleClose={handleClose}
       formSubmit={formSubmit}
-      title="Добавить доску"
+      title={t('add_board')}
       loading={status}
     >
       <TextField
@@ -133,7 +135,7 @@ const BoardModal = () => {
         required
         margin="dense"
         id="outlined-required"
-        label="Введите название доски"
+        label={t('enter_board_name')}
         helperText={errors.title?.message}
         {...register('title', registerOptions.title)}
         error={errors.title ? true : false}
@@ -144,14 +146,14 @@ const BoardModal = () => {
         defaultValue={[]}
         render={({ field }) => (
           <FormControl sx={{ width: '100%', mt: '8px' }}>
-            <InputLabel id="users">Участники</InputLabel>
+            <InputLabel id="users">{t('users')}</InputLabel>
             <Select
               {...field}
               labelId="users"
               label="users"
               multiple
               defaultValue={[]}
-              input={<OutlinedInput label="Участники" />}
+              input={<OutlinedInput label={t('users')} />}
             >
               {users.map((user) => (
                 <MenuItem value={user.name} key={user._id}>

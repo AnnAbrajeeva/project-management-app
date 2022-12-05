@@ -6,11 +6,13 @@ import { AppDispatch, RootState } from 'redux/store';
 import { getUser } from 'redux/thunks';
 import { useSelector } from 'react-redux';
 import ProfileForm from 'components/ProfileForm';
+import { useTranslation } from 'react-i18next';
 
 function UserProfile() {
   const dispatch = useDispatch<AppDispatch>();
   const userId = useSelector((state: RootState) => state.user.user?.id);
   const user = useSelector((state: RootState) => state.users.user);
+  const { t } = useTranslation();
 
   useEffect(() => {
     async function receiveUser() {
@@ -48,7 +50,7 @@ function UserProfile() {
         >
           {user && (
             <>
-              <h1 className={style.title}>Настройки пользователя</h1>
+              <h1 className={style.title}>{t('user_settings')}</h1>
               <div className={style.formWrapper}>
                 <ProfileForm user={user!} />
               </div>

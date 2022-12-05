@@ -7,11 +7,13 @@ import { createColumn } from 'redux/thunks';
 import { useDispatch, useSelector } from 'react-redux';
 import { setOpen } from 'redux/slices/snackbarSlice';
 import { AppDispatch, RootState } from 'redux/store';
+import { useTranslation } from 'react-i18next';
 
 function ColumnModal({ open, handleClose }: ColumnModalProps) {
   const dispatch = useDispatch<AppDispatch>();
   const board = useSelector((state: RootState) => state.board.board);
   const { columns, status, error } = useSelector((state: RootState) => state.columns);
+  const { t } = useTranslation();
 
   const onSubmit = async (data: CreateColumnProps) => {
     await dispatch(createColumn(data));
@@ -28,7 +30,7 @@ function ColumnModal({ open, handleClose }: ColumnModalProps) {
       dispatch(
         setOpen({
           open: true,
-          message: 'Колонка успешно создана!',
+          message: t('createColumn_success_message'),
           view: 'success',
         })
       );
@@ -73,7 +75,7 @@ function ColumnModal({ open, handleClose }: ColumnModalProps) {
       handleSubmit={handleSubmit}
       handleClose={handleClose}
       formSubmit={formSubmit}
-      title="Добавить колонку"
+      title={t('add_column')}
       loading={status}
     >
       <TextField
@@ -82,7 +84,7 @@ function ColumnModal({ open, handleClose }: ColumnModalProps) {
         required
         margin="dense"
         id="outlined-required"
-        label="Введите название колонки"
+        label={t('enter_column_name')}
         helperText={errors.title?.message}
         {...register('title', registerOptions.title)}
       />

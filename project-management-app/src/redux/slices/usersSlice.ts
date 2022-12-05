@@ -1,6 +1,6 @@
 import { UsersState } from './../../utils/types';
 import { createSlice } from '@reduxjs/toolkit';
-import { getUser, getUsers, updateUser } from 'redux/thunks';
+import { deleteUser, getUser, getUsers, updateUser } from 'redux/thunks';
 
 const initialState: UsersState = {
   users: [],
@@ -61,6 +61,24 @@ const usersSlice = createSlice({
       builder.addCase(updateUser.fulfilled, (state, action) => {
         state.status = 'success';
         state.user = action.payload;
+        state.error = '';
+      }),
+      builder.addCase(deleteUser.pending, (state) => {
+        state.status = 'loading';
+        state.user = state.user = {
+          name: '',
+          login: '',
+          _id: '',
+        };
+        state.error = '';
+      }),
+      builder.addCase(deleteUser.rejected, (state, action) => {
+        state.status = 'error';
+        state.user = null;
+        state.error = action.payload as string;
+      }),
+      builder.addCase(deleteUser.fulfilled, (state, action) => {
+        state.status = 'success';
         state.error = '';
       });
   },

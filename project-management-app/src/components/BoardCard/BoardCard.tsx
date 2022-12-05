@@ -11,9 +11,11 @@ import { deleteBoard } from 'redux/thunks';
 import { setEditBoard, setModal } from 'redux/slices/boardSlice';
 import User from '../../assets/img/user.png';
 import { Tooltip } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 function BoardCard({ board, index }: BoardCardProps) {
   const dispatch = useDispatch<AppDispatch>();
+  const { t } = useTranslation();
 
   function removeBoard() {
     dispatch(deleteBoard(board._id));
@@ -30,7 +32,7 @@ function BoardCard({ board, index }: BoardCardProps) {
         <div className={style.content}>
           <h2>{getIndex(index)}</h2>
           <h3>{board.title}</h3>
-          <Link to={`/boards/${board._id}`}>Go to the board</Link>
+          <Link to={`/boards/${board._id}`}>{t('go_to_board')}</Link>
           <div className={style.buttons}>
             <div className={style.wrapper}>
               <div onClick={editBoard} className={style.edit}>

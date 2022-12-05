@@ -15,6 +15,7 @@ import { schemaLogin } from './validation';
 import { setOpen } from 'redux/slices/snackbarSlice';
 import { getUserParams } from 'utils/getUserParams';
 import { getFromLocal, setToLocalStorage } from 'utils/localStorage';
+import { useTranslation } from 'react-i18next';
 
 export const MyInput = styled(Input)({
   fieldset: {
@@ -29,6 +30,7 @@ function LoginForm() {
   const navigate = useNavigate();
   const { newUser, error, status, token } = useSelector((state: RootState) => state.user);
   const isAuth = getFromLocal('token');
+  const { t } = useTranslation();
 
   const {
     register,
@@ -85,7 +87,7 @@ function LoginForm() {
     <form onSubmit={handleSubmit(onSubmitHandler)} className={style.login}>
       <MyInput
         variant="outlined"
-        label="Введите Ваш логин"
+        label={t('enter_your_login')}
         error={errors.login ? true : false}
         helperText={errors.login?.message}
         {...register('login')}
@@ -93,7 +95,7 @@ function LoginForm() {
 
       <MyInput
         variant="outlined"
-        label="Введите Ваш пароль"
+        label={t('enter_your_password')}
         error={errors.password ? true : false}
         helperText={errors.password?.message}
         {...register('password')}
@@ -101,7 +103,7 @@ function LoginForm() {
       />
 
       <p className={style.text}>
-        Еще нет аккаунта? <Link to={'/registration'}>Регистрация</Link>
+        {t('have_not_account')}? <Link to={'/registration'}>{t('registration')}</Link>
       </p>
       <LoadingButton
         sx={{ p: '8px', fontSize: '18px' }}
@@ -110,7 +112,7 @@ function LoginForm() {
         type="submit"
         disabled={isDisabled}
       >
-        Войти
+        {t('logIn')}
       </LoadingButton>
     </form>
   );

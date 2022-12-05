@@ -1,8 +1,6 @@
 import React from 'react';
 import { Container, Paper } from '@mui/material';
 import style from './Auth.module.scss';
-import ErrorBoundary from 'components/ErrorBoundary/ErrorBoundary';
-import LoginForm from 'components/AuthForm/Login';
 import RegisterForm from 'components/AuthForm/Registration';
 
 function AuthPage() {
