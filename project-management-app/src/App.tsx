@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material';
 import MainPage from './pages/MainPage';
@@ -15,6 +15,7 @@ import { useDispatch } from 'react-redux';
 import { removeUser } from 'redux/slices/userSlice';
 import { removeFromLocal } from 'utils/localStorage';
 import AuthVerify from 'common/AuthVerify';
+import UserProfile from 'pages/UserProfile';
 
 const theme = createTheme({
   typography: {
@@ -42,6 +43,7 @@ function App() {
         <Route path="/registration" element={<AuthPage />} />
         <Route path="/welcome" element={<Welcome />} />
         <Route path="/boards/:id" element={<BoardPage />} />
+        <Route path="/profile" element={<UserProfile />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />

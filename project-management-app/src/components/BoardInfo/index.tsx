@@ -9,14 +9,16 @@ import ColumnModal from './ColumnModal';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 import { useDispatch } from 'react-redux';
 import { fetchTasks, updateColumn, updateColumnOrder, updateOrderTask } from 'redux/thunks';
-import { Task } from 'utils/types';
+import { Column, Task } from 'utils/types';
 import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 function BoardInfo() {
   const [open, setOpen] = useState(false);
   const columns = useSelector((state: RootState) => state.columns.columns);
   const [columnsArr, setColumnsArr] = useState(columns);
   const dispatch = useDispatch<AppDispatch>();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const newColumns = [...columns];
@@ -30,18 +32,10 @@ function BoardInfo() {
     if (destination.droppableId === source.droppableId && destination.index === source.index)
       return;
 
-    const columnIndex = columns.findIndex((column) => column._id === destination.droppableId);
-
     if (type === 'column') {
-      const newParams = {
-        boardId: columns[columnIndex].boardId,
-        _id: columns[columnIndex]._id,
-        title: columns[columnIndex].title,
-        order: destination.index + 1,
-      };
       const col = [...columns];
-      col.splice(columnIndex, 1);
-      col.splice(destination.index, 1, newParams);
+      const spliced = col.splice(source.index, 1)[0];
+      col.splice(destination.index, 0, spliced);
       setColumnsArr(col);
       const newOrder = col.map((column, i) => {
         return {
@@ -56,86 +50,65 @@ function BoardInfo() {
         );
       });
     } else {
-      const tasks = [...columns[columnIndex].tasks!];
-      const taskIndex = tasks.findIndex((task) => task._id === draggableId);
-      if (source.droppableId === destination.droppableId) {
-        const newTask = {
-          ...tasks[taskIndex],
-          order: destination.index + 1,
-        };
+      const colArr = [...columnsArr];
+      const [sourceGroup] = colArr.filter((column) => column._id === source.droppableId);
 
-        tasks.splice(source.index, 1);
-        tasks.splice(destination.index, 0, newTask);
-      } else {
-        const newTask = {
-          ...columns[columnIndex].tasks![taskIndex],
-          order: destination.index + 1,
-          columnId: destination.droppableId,
-        };
-        columns[columnIndex].tasks!.splice(source.index, 1);
-        columns[columnIndex].tasks!.splice(destination.index, 0, newTask);
-      }
+      const destinationGroup = destination
+        ? colArr.find((column) => column._id === destination.droppableId)
+        : { ...sourceGroup };
 
-      const newTaskArr = tasks.map((task, index) => {
-        return {
-          ...task,
-          order: index + 1,
-        };
+      const movingTask: Task | undefined = sourceGroup?.tasks?.find(
+        (task) => task._id === draggableId
+      );
+
+      const sourceTasks = [...sourceGroup.tasks!];
+      const destinationTasks = [...destinationGroup!.tasks!];
+
+      sourceTasks.splice(source.index, 1);
+
+      destinationTasks.splice(destination.index, 0, movingTask!);
+
+      const newTaskList = colArr.map((column) => {
+        if (column._id === source.droppableId) {
+          return {
+            ...column,
+            tasks: sourceTasks,
+          };
+        }
+        if (column._id === destination.droppableId) {
+          return {
+            ...column,
+            tasks: destinationTasks,
+          };
+        }
+
+        return column;
       });
-      console.log(newTaskArr);
-      const newOrder = newTaskArr.map((task: Task) => {
+
+      const newOrder = destinationTasks.map((task, i) => {
         return {
           _id: task._id,
-          order: task.order,
-          columnId: task.columnId,
+          order: i + 1,
+          columnId: destination.droppableId,
         };
       });
 
-      await dispatch(updateOrderTask({ columnId: destination.droppableId, tasks: newOrder }));
-      // Promise.all(
-      //   columns.map((column) => {
-      //     dispatch(fetchTasks({ id: column.boardId, columnId: column._id }));
-      //   })
-      // );
-      // const columnIndex = tasks.findIndex((column) => column.columnId === destination.droppableId);
-      // const columnTasks = tasks.find((item) => item.columnId === source.droppableId);
-      // if (columnTasks) {
-      //   const task = columnTasks.find((task) => task._id === draggableId);
+      const sourceOrderTask = sourceTasks.map((task, i) => {
+        return {
+          _id: task._id,
+          order: i + 1,
+          columnId: source.droppableId,
+        };
+      });
 
-      //   const column = columnTasks.find((column) => column._id === task!.columnId);
-      //   const tasksArr = columnTasks.filter((task) => task.columnId === column?._id);
-      //   const index = tasksArr.findIndex((task) => task._id === draggableId);
-      //   if (source.droppableId === destination.droppableId) {
-      //     const newTask = {
-      //       ...task!,
-      //       order: destination.index + 1,
-      //     };
-      //     tasksArr.splice(index, 1);
-      //     tasksArr.splice(destination.index, 0, newTask);
-      //     const newTaskArr = tasksArr.map((task, index) => {
-      //       return {
-      //         ...task,
-      //         order: index + 1,
-      //       };
-      //     });
-      //     console.log(newTaskArr);
-      //     const newOrder = newTaskArr.map((task) => {
-      //       return {
-      //         _id: task._id,
-      //         order: task.order,
-      //         columnId: task.columnId,
-      //       };
-      //     });
-      //     console.log(newOrder);
-      //     await dispatch(updateOrderTask({ columnId: destination.droppableId, tasks: newOrder }));
-      //     Promise.all(
-      //       columns.map((column) => {
-      //         dispatch(fetchTasks({ id: column.boardId, columnId: column._id }));
-      //       })
-      //     );
-      //   }
-      // }
-      console.log(result);
+      setColumnsArr(newTaskList);
+
+      if (source.droppableId === destination.droppableId) {
+        dispatch(updateOrderTask({ columnId: source.droppableId, tasks: newOrder }));
+      } else {
+        await dispatch(updateOrderTask({ columnId: source.droppableId, tasks: sourceOrderTask }));
+        await dispatch(updateOrderTask({ columnId: destination.droppableId, tasks: newOrder }));
+      }
     }
   };
 
@@ -171,7 +144,7 @@ function BoardInfo() {
               })}
 
               {provided.placeholder}
-              <EmptyBoard action={handleClickOpen} text="Добавить колонку" />
+              <EmptyBoard action={handleClickOpen} text={t('add_column')} />
             </div>
           )}
         </Droppable>

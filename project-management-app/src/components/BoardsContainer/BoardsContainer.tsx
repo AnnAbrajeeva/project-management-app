@@ -9,10 +9,12 @@ import Loader from 'components/Loader';
 import { Board } from 'utils/types';
 import BoardModal from './BoardModal';
 import { setModal } from 'redux/slices/boardSlice';
+import { useTranslation } from 'react-i18next';
 
 function BoardsContainer() {
   const dispatch = useDispatch<AppDispatch>();
   const { status, boards } = useSelector((state: RootState) => state.board);
+  const { t } = useTranslation();
 
   useEffect(() => {
     dispatch(fetchBoards());
@@ -38,7 +40,7 @@ function BoardsContainer() {
       })}
 
       <Grid sx={{ padding: '30px' }} item xs={12} md={6} lg={4}>
-        <EmptyBoard action={openModal} text="Добавить доску" />
+        <EmptyBoard action={openModal} text={t('add_board')} />
       </Grid>
       <BoardModal />
     </Grid>

@@ -1,20 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Input from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
 import LoadingButton from '@mui/lab/LoadingButton';
-import style from './Auth.module.scss';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import style from './ProfileForm.module.scss';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { FieldValues, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { NewUser, RegisterFormData } from 'utils/types';
+import { NewUser, ProfileUserProps } from 'utils/types';
 import { useDispatch, useSelector } from 'react-redux';
-import { createUser } from 'redux/thunks';
+import { deleteUser, updateUser } from 'redux/thunks';
 import { AppDispatch, RootState } from 'redux/store';
-import { setNewUser } from 'redux/slices/userSlice';
 import { schemaRegistration } from './validation';
 import { setOpen } from 'redux/slices/snackbarSlice';
-import { getFromLocal } from 'utils/localStorage';
+import { getFromLocal, removeFromLocal } from 'utils/localStorage';
+import { removeUser } from 'redux/slices/userSlice';
 import { useTranslation } from 'react-i18next';
+import ConfirmModal from 'components/ConfirmModal/ConfirmModal';
 
 export const MyInput = styled(Input)({
   fieldset: {
@@ -24,12 +25,12 @@ export const MyInput = styled(Input)({
   },
 });
 
-function RegisterForm() {
+function ProfileForm({ user }: ProfileUserProps) {
+  const [show, setShow] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
-  const status = useSelector((state: RootState) => state.user.status);
-  const error = useSelector((state: RootState) => state.user.error);
-  const navigate = useNavigate();
+  const { status, error } = useSelector((state: RootState) => state.users);
   const isAuth = getFromLocal('token');
+  const navigate = useNavigate();
   const { t } = useTranslation();
 
   const {
@@ -37,24 +38,61 @@ function RegisterForm() {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<RegisterFormData>({
+  } = useForm<NewUser>({
     resolver: yupResolver(schemaRegistration),
     mode: 'onChange',
   });
 
-  if (isAuth) {
+  useEffect(() => {
+    const defaultValues = {
+      name: '',
+      login: '',
+      password: '',
+    };
+    defaultValues.name = user.name;
+    defaultValues.login = user.login;
+    defaultValues.password = '';
+    reset({ ...defaultValues });
+  }, [user, reset]);
+
+  if (!isAuth) {
     return <Navigate to="/" />;
   }
 
   const onSubmit = async (data: NewUser) => {
-    await dispatch(createUser(data));
-    goToLogin(data);
+    if (user) {
+      await dispatch(
+        updateUser({
+          id: user._id,
+          user: data,
+        })
+      );
+      showToast();
+      reset();
+    }
   };
 
-  function goToLogin(data: NewUser) {
-    const toastMessage = error ? error : t('registration_success_message');
+  async function deleteThisUser() {
+    await dispatch(deleteUser(user._id));
+    if (status === 'success') {
+      removeUser();
+      removeFromLocal('token');
+      removeFromLocal('user');
+      navigate('/welcome');
+    }
+  }
+
+  function delUser() {
+    setShow(true);
+  }
+
+  function closeConfirm() {
+    setShow(false);
+  }
+
+  function showToast() {
+    const toastMessage = error ? error : t('profile_changed');
     const toastStyle = error ? 'error' : 'success';
-    dispatch(setNewUser(data));
     dispatch(
       setOpen({
         open: true,
@@ -62,11 +100,6 @@ function RegisterForm() {
         view: toastStyle,
       })
     );
-    setTimeout(() => {
-      if (!error) {
-        navigate('/login');
-      }
-    }, 4000);
   }
 
   const onSubmitHandler = (data: FieldValues) => {
@@ -75,7 +108,6 @@ function RegisterForm() {
       login: data.login,
       password: data.password,
     });
-    reset();
   };
 
   const isDisabled = Object.keys(errors).length ? true : false;
@@ -86,14 +118,14 @@ function RegisterForm() {
         <MyInput
           variant="outlined"
           error={errors.name ? true : false}
-          label={t('enter_your_name')}
+          label={t('enter_new_name')}
           helperText={errors.name?.message}
           {...register('name')}
         />
 
         <MyInput
           variant="outlined"
-          label={t('enter_your_login')}
+          label={t('enter_new_login')}
           error={errors.login ? true : false}
           helperText={errors.login?.message}
           {...register('login')}
@@ -101,25 +133,13 @@ function RegisterForm() {
 
         <MyInput
           variant="outlined"
-          label={t('enter_your_password')}
+          label={t('enter_new_password')}
           error={errors.password ? true : false}
           helperText={errors.password?.message}
           {...register('password')}
           type="password"
         />
 
-        <MyInput
-          variant="outlined"
-          error={errors.confirmPassword ? true : false}
-          label={t('confirm_pass')}
-          helperText={errors.confirmPassword?.message}
-          {...register('confirmPassword')}
-          type="password"
-        />
-
-        <p className={style.text}>
-          {t('have_account')}? <Link to={'/login'}>{t('logIn')}</Link>
-        </p>
         <LoadingButton
           sx={{ p: '8px', fontSize: '18px' }}
           loading={status === 'loading'}
@@ -127,11 +147,28 @@ function RegisterForm() {
           type="submit"
           disabled={isDisabled}
         >
-          {t('registration')}
+          {t('change')}
+        </LoadingButton>
+
+        <LoadingButton
+          sx={{ p: '8px', fontSize: '18px' }}
+          loading={status === 'loading'}
+          variant="contained"
+          disabled={isDisabled}
+          onClick={delUser}
+        >
+          {t('delete_user')}
         </LoadingButton>
       </form>
+      <ConfirmModal
+        showConfirm={show}
+        handleClose={closeConfirm}
+        title={t('del_user_confirm')}
+        loading={status}
+        action={deleteThisUser}
+      />
     </>
   );
 }
 
-export default RegisterForm;
+export default ProfileForm;

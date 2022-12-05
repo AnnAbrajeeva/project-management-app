@@ -76,9 +76,8 @@ const columnsSlice = createSlice({
       }),
       builder.addCase(updateColumn.fulfilled, (state, action) => {
         state.status = 'success';
-        state.columns = state.columns.map((column) =>
-          column._id !== action.payload._id ? column : action.payload
-        );
+        const columnIndex = state.columns.findIndex((column) => column._id === action.payload._id);
+        state.columns[columnIndex].title = action.payload.title;
         state.error = '';
       }),
       builder.addCase(updateColumnOrder.pending, (state) => {
@@ -128,10 +127,9 @@ const columnsSlice = createSlice({
         const columnIndex = state.columns.findIndex(
           (column) => column._id === action.payload.columnId
         );
-        state.columns[columnIndex].tasks = [
-          ...state.columns[columnIndex].tasks!,
-          { ...action.payload },
-        ];
+        state.columns[columnIndex].tasks = state.columns[columnIndex].tasks
+          ? [...state.columns[columnIndex].tasks!, { ...action.payload }]
+          : [{ ...action.payload }];
         state.error = '';
         state.status = 'success';
       }),
@@ -152,9 +150,8 @@ const columnsSlice = createSlice({
         const taskIndex = state.columns[columnIndex].tasks?.findIndex(
           (task) => task._id === action.payload._id
         );
-        if (taskIndex) {
-          state.columns[columnIndex].tasks?.splice(taskIndex, 1);
-        }
+
+        state.columns[columnIndex].tasks?.splice(taskIndex!, 1);
       }),
       builder.addCase(editTask.pending, (state) => {
         state.status = 'loading';
@@ -173,21 +170,15 @@ const columnsSlice = createSlice({
         const taskIndex = state.columns[columnIndex].tasks?.findIndex(
           (task) => task._id === action.payload._id
         );
-        if (
-          taskIndex &&
-          columnIndex &&
-          state.columns[columnIndex].tasks !== undefined &&
-          state.columns[columnIndex].tasks?.length
-        ) {
-          state.columns[columnIndex].tasks![taskIndex] = {
-            ...state.columns[columnIndex].tasks![taskIndex],
-            ...action.payload,
-          };
-        }
+
+        state.columns[columnIndex].tasks![taskIndex!] = {
+          ...state.columns[columnIndex].tasks![taskIndex!],
+          ...action.payload,
+        };
         state.error = '';
       }),
       builder.addCase(updateOrderTask.pending, (state) => {
-        state.status = 'loading';
+        // state.status = 'loading';
         state.error = '';
       }),
       builder.addCase(updateOrderTask.rejected, (state, action) => {

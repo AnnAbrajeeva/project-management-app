@@ -1,9 +1,12 @@
+import { Button } from '@mui/material';
 import BoardInfo from 'components/BoardInfo';
 import BoardsPageHeader from 'components/BoardsPageHeader';
+import ErrorBoundary from 'components/ErrorBoundary/ErrorBoundary';
 import Loader from 'components/Loader';
 import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { setOpen } from 'redux/slices/snackbarSlice';
 import { AppDispatch, RootState } from 'redux/store';
 import { fetchBoardById, fetchColumnsById, fetchTasks, getUsers } from 'redux/thunks';
@@ -15,8 +18,8 @@ function BoardPage() {
   const { id } = useParams();
   const dispatch = useDispatch<AppDispatch>();
   const { board, status } = useSelector((state: RootState) => state.board);
-  const { columns } = useSelector((state: RootState) => state.columns);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const isAuth = getFromLocal('token');
@@ -53,8 +56,17 @@ function BoardPage() {
     <div className={style.main}>
       <div className={style.wrapper}></div>
       <div className={style.container}>
+        <Link className={style.button} to={'/'}>
+          <Button variant="contained">{t('goBack')}</Button>
+        </Link>
         <BoardsPageHeader title={`Board: ${title}`} />
-        {status === 'loading' ? <Loader /> : <BoardInfo />}
+        {status === 'loading' ? (
+          <Loader />
+        ) : (
+          <ErrorBoundary>
+            <BoardInfo />
+          </ErrorBoundary>
+        )}
       </div>
     </div>
   );

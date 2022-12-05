@@ -29,10 +29,19 @@
 .text {
   text-align: center;
   margin: 0;
+
+  @media (max-width: 720px) {
+    text-align: left;
+  }
 }
 
 .gitlinks {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  margin-right: auto;
+
+  a {
+    margin: 0 20px;
+  }
 }

@@ -24,9 +24,6 @@ function Footer() {
                 <Link className={style.links} to={'https://github.com/AnnAbrajeeva'}>
                   AnnAbrajeeva
                 </Link>
-                <Link className={style.links} to={'https://github.com/Kirakle'}>
-                  Kirakle
-                </Link>
                 <Link className={style.links} to={'https://github.com/shahzod222'}>
                   shahzod222
                 </Link>

@@ -2,6 +2,7 @@ import { TextField, FormControl, InputLabel, Select, OutlinedInput, MenuItem } f
 import Modal from 'components/Modal';
 import React, { useEffect } from 'react';
 import { Controller, FieldValues, SubmitHandler, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { setOpen } from 'redux/slices/snackbarSlice';
 import { AppDispatch, RootState } from 'redux/store';
@@ -13,6 +14,7 @@ function TaskModal({ open, handleClose, tasks, board, columnId, task }: TaskModa
   const user = useSelector((state: RootState) => state.user.user);
   const { error, status } = useSelector((state: RootState) => state.columns);
   const dispatch = useDispatch<AppDispatch>();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const defaultValues: { title: string; description: string; users: string[] } = {
@@ -86,7 +88,7 @@ function TaskModal({ open, handleClose, tasks, board, columnId, task }: TaskModa
   });
 
   const responsibles = board.users.length ? board.users : users;
-  const message = task ? 'Таск изменён!' : 'Таск успешно создан!';
+  const message = task ? `${t('changed_task')}!` : `${t('created_task')}!`;
 
   const onSubmit = async (data: CreateTaskProps) => {
     if (task) {
@@ -122,7 +124,7 @@ function TaskModal({ open, handleClose, tasks, board, columnId, task }: TaskModa
       handleSubmit={handleSubmit}
       handleClose={handleClose}
       formSubmit={formSubmit}
-      title={task ? 'Редактировать таск' : 'Добавить таск'}
+      title={task ? t('edit_task') : t('add_task')}
       loading={status}
     >
       <TextField
@@ -131,7 +133,7 @@ function TaskModal({ open, handleClose, tasks, board, columnId, task }: TaskModa
         required
         margin="dense"
         id="outlined-required"
-        label="Введите название таска"
+        label={t('enter_task_name')}
         helperText={errors.title?.message}
         {...register('title', registerOptions.title)}
       />
@@ -141,7 +143,7 @@ function TaskModal({ open, handleClose, tasks, board, columnId, task }: TaskModa
         required
         margin="dense"
         id="outlined-required"
-        label="Введите описание таска"
+        label={t('enter_task_descr')}
         helperText={errors.description?.message}
         {...register('description', registerOptions.description)}
       />
@@ -151,14 +153,14 @@ function TaskModal({ open, handleClose, tasks, board, columnId, task }: TaskModa
         defaultValue={[]}
         render={({ field }) => (
           <FormControl sx={{ width: '100%', mt: '8px' }}>
-            <InputLabel id="users">Участники</InputLabel>
+            <InputLabel id="users">{t('users')}</InputLabel>
             <Select
               {...field}
               labelId="users"
               label="users"
               multiple
               defaultValue={[]}
-              input={<OutlinedInput label="Участники" />}
+              input={<OutlinedInput label={t('users')} />}
             >
               {responsibles.map((user, i) => (
                 <MenuItem

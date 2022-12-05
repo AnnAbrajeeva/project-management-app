@@ -12,6 +12,7 @@ import { setModal } from '../../redux/slices/boardSlice';
 import { removeUser } from 'redux/slices/userSlice';
 import { removeFromLocal } from 'utils/localStorage';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const theme = createTheme({
   palette: {
@@ -22,13 +23,19 @@ const theme = createTheme({
 });
 
 function NavLinks() {
-  const [lang, setLang] = React.useState<string | null>('RU');
+  const activeLang = localStorage.getItem('i18nextLng')
+    ? localStorage.getItem('i18nextLng')!.toUpperCase()
+    : 'RU';
+  const [lang, setLang] = React.useState<string>(activeLang);
   const matches = useMediaQuery('(min-width:921px)');
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
-  const handleAlignment = (event: React.MouseEvent<HTMLElement>, newAlignment: string | null) => {
+  const { t, i18n } = useTranslation();
+
+  const handleAlignment = (event: React.MouseEvent<HTMLElement>, newAlignment: string) => {
     setLang(newAlignment);
+    i18n.changeLanguage(newAlignment.toLowerCase());
   };
 
   function addBoard() {
@@ -42,27 +49,35 @@ function NavLinks() {
     navigate('/welcome');
   }
 
+  function goToProfile() {
+    navigate('/profile');
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: 'auto' }}>
         <Box sx={{ display: { xs: 'none', sm: 'block' }, mr: 2 }}>
-          <Tooltip title="Создать новую доску">
+          <Tooltip title={t('create_new_board')}>
             <MyButton
               onClick={addBoard}
               sx={{ color: 'inherit' }}
               startIcon={<AddCircleOutlineIcon />}
             >
-              {matches && <p className={style.text}>Создать новую доску</p>}
+              {matches && <p className={style.text}>{t('create_new_board')}</p>}
             </MyButton>
           </Tooltip>
-          <Tooltip title="Редактировать профиль">
-            <MyButton sx={{ color: 'inherit' }} startIcon={<ManageAccountsIcon />}>
-              {matches && <p>Редактировать профиль</p>}
+          <Tooltip title={t('edit_profile')}>
+            <MyButton
+              onClick={goToProfile}
+              sx={{ color: 'inherit' }}
+              startIcon={<ManageAccountsIcon />}
+            >
+              {matches && <p>{t('edit_profile')}</p>}
             </MyButton>
           </Tooltip>
           <Tooltip title="Выйти">
             <MyButton onClick={logOut} sx={{ color: 'inherit' }} startIcon={<LogoutIcon />}>
-              {matches && <p>Выйти</p>}
+              {matches && <p>{t('logOut')}</p>}
             </MyButton>
           </Tooltip>
         </Box>

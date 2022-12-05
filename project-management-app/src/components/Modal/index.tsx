@@ -7,6 +7,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import style from './Modal.module.scss';
 import { ModalProps } from 'utils/types';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { useTranslation } from 'react-i18next';
 
 function Modal({
   open,
@@ -17,6 +18,7 @@ function Modal({
   handleSubmit,
   loading,
 }: ModalProps) {
+  const { t } = useTranslation();
   return (
     <Dialog fullWidth={true} maxWidth="sm" open={open} onClose={handleClose}>
       <div onClick={handleClose} className={style.close}>
@@ -32,7 +34,7 @@ function Modal({
             loading={loading === 'loading'}
             variant="contained"
           >
-            Добавить
+            {t('add')}
           </LoadingButton>
         </DialogActions>
       </form>
