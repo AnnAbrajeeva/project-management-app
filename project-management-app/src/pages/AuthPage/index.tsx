@@ -2,8 +2,11 @@ import React from 'react';
 import { Container, Paper } from '@mui/material';
 import style from './Auth.module.scss';
 import RegisterForm from 'components/AuthForm/Registration';
+import { useTranslation } from 'react-i18next';
+import ErrorBoundary from 'components/ErrorBoundary/ErrorBoundary';
 
 function AuthPage() {
+  const { t } = useTranslation();
   return (
     <div className={style.main}>
       <div className={style.wrapper}></div>
@@ -29,9 +32,11 @@ function AuthPage() {
           }}
           maxWidth="lg"
         >
-          <h1 className={style.title}>Регистрация</h1>
+          <h1 className={style.title}>{t('registration')}</h1>
           <div className={style.formWrapper}>
-            <RegisterForm />
+            <ErrorBoundary>
+              <RegisterForm />
+            </ErrorBoundary>
           </div>
         </Container>
       </Paper>

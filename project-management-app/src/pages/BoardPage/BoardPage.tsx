@@ -1,5 +1,6 @@
 import BoardInfo from 'components/BoardInfo';
 import BoardsPageHeader from 'components/BoardsPageHeader';
+import ErrorBoundary from 'components/ErrorBoundary/ErrorBoundary';
 import Loader from 'components/Loader';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -53,7 +54,13 @@ function BoardPage() {
       <div className={style.wrapper}></div>
       <div className={style.container}>
         <BoardsPageHeader title={`Board: ${title}`} />
-        {status === 'loading' ? <Loader /> : <BoardInfo />}
+        {status === 'loading' ? (
+          <Loader />
+        ) : (
+          <ErrorBoundary>
+            <BoardInfo />
+          </ErrorBoundary>
+        )}
       </div>
     </div>
   );

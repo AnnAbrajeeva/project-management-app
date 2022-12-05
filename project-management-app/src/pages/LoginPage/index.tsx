@@ -32,7 +32,9 @@ function LoginPage() {
         >
           <h1 className={style.title}>Вход</h1>
           <div className={style.formWrapper}>
-            <LoginForm />
+            <ErrorBoundary>
+              <LoginForm />
+            </ErrorBoundary>
           </div>
         </Container>
       </Paper>

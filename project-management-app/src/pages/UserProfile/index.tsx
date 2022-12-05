@@ -7,6 +7,7 @@ import { getUser } from 'redux/thunks';
 import { useSelector } from 'react-redux';
 import ProfileForm from 'components/ProfileForm';
 import { useTranslation } from 'react-i18next';
+import ErrorBoundary from 'components/ErrorBoundary/ErrorBoundary';
 
 function UserProfile() {
   const dispatch = useDispatch<AppDispatch>();
@@ -52,7 +53,9 @@ function UserProfile() {
             <>
               <h1 className={style.title}>{t('user_settings')}</h1>
               <div className={style.formWrapper}>
-                <ProfileForm user={user!} />
+                <ErrorBoundary>
+                  <ProfileForm user={user!} />
+                </ErrorBoundary>
               </div>
             </>
           )}

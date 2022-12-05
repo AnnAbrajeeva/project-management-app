@@ -23,7 +23,10 @@ const theme = createTheme({
 });
 
 function NavLinks() {
-  const [lang, setLang] = React.useState<string>('RU');
+  const activeLang = localStorage.getItem('i18nextLng')
+    ? localStorage.getItem('i18nextLng')!.toUpperCase()
+    : 'RU';
+  const [lang, setLang] = React.useState<string>(activeLang);
   const matches = useMediaQuery('(min-width:921px)');
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
