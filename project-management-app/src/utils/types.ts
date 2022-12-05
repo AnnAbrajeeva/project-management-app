@@ -135,6 +135,7 @@ export interface TaskState {
 
 export interface UsersState {
   users: User[];
+  user: User | null;
   status: 'loading' | 'error' | 'success';
   error: string;
 }
@@ -310,4 +311,13 @@ export interface TaskOrderProps {
   _id: string;
   order: number;
   columnId: string;
+}
+
+export interface UpdateUserProps {
+  id: string;
+  user: NewUser;
+}
+
+export interface ProfileUserProps {
+  user: User;
 }

@@ -11,6 +11,7 @@ import {
   CreateTaskProps,
   Column,
   TaskOrderProps,
+  UpdateUserProps,
 } from './../utils/types';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
@@ -234,6 +235,40 @@ export const loginUser = createAsyncThunk(
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 401) {
           return rejectWithValue('Неверный логин или пароль');
+        }
+        return rejectWithValue('Ошибка сервера, попробуйте позже');
+      }
+    }
+  }
+);
+
+export const getUser = createAsyncThunk(
+  'users/getUser',
+  async (id: string, { rejectWithValue }) => {
+    try {
+      const res = await api.get(`/users/${id}`);
+      return res.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 404) {
+          return rejectWithValue('Пользователь не найден');
+        }
+        return rejectWithValue('Ошибка сервера, попробуйте позже');
+      }
+    }
+  }
+);
+
+export const updateUser = createAsyncThunk(
+  'users/updateUser',
+  async ({ id, user }: UpdateUserProps, { rejectWithValue }) => {
+    try {
+      const res = await api.put(`/users/${id}`, user);
+      return res.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 409) {
+          return rejectWithValue('Такой логин уже зарегистрирован');
         }
         return rejectWithValue('Ошибка сервера, попробуйте позже');
       }

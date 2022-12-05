@@ -103,8 +103,6 @@ function Board({ column, index }: ColumnProps) {
     }
   }
 
-  console.log(column.tasks);
-
   return (
     <>
       <Draggable draggableId={column._id} index={index}>

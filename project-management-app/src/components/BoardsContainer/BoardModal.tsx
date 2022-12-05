@@ -50,7 +50,7 @@ const BoardModal = () => {
   const registerOptions = {
     title: {
       required: 'Title is required',
-      minLength: { value: 2, message: 'Name must have at least 2 characters' },
+      minLength: { value: 2, message: 'Title must have at least 2 characters' },
       value: '',
     },
   };
@@ -111,7 +111,7 @@ const BoardModal = () => {
     if (user) {
       onSubmit({
         title: data.title,
-        owner: user?.id,
+        owner: user.id,
         users: data.users,
       });
       reset();
