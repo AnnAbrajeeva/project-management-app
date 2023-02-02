@@ -23,7 +23,17 @@ const initialState: ColumnsState = {
 const columnsSlice = createSlice({
   name: 'columns',
   initialState,
-  reducers: {},
+  reducers: {
+    removeTaskFromEmptyColumn(state, action) {
+      state.columns = state.columns.map((column) => {
+        if (column._id === action.payload) {
+          column.tasks = [];
+          return column;
+        }
+        return column;
+      });
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchColumnsById.pending, (state) => {
       state.status = 'loading';
@@ -36,7 +46,12 @@ const columnsSlice = createSlice({
         state.error = action.payload as string;
       }),
       builder.addCase(fetchColumnsById.fulfilled, (state, action) => {
-        state.columns = action.payload;
+        state.columns = action.payload.map((column: Column) => {
+          return {
+            ...column,
+            tasks: [],
+          };
+        });
         state.status = 'success';
         state.error = '';
       }),
@@ -81,7 +96,7 @@ const columnsSlice = createSlice({
         state.error = '';
       }),
       builder.addCase(updateColumnOrder.pending, (state) => {
-        state.status = 'loading';
+        // state.status = 'loading';
         state.error = '';
       }),
       builder.addCase(updateColumnOrder.rejected, (state, action) => {
@@ -91,7 +106,7 @@ const columnsSlice = createSlice({
       builder.addCase(updateColumnOrder.fulfilled, (state, action) => {
         state.status = 'success';
         state.error = '';
-        state.columns = action.payload;
+        // state.columns = action.payload;
       }),
       builder.addCase(fetchTasks.pending, (state) => {
         state.status = 'loading';
@@ -108,9 +123,10 @@ const columnsSlice = createSlice({
           const index = state.columns.findIndex((column) => {
             return column._id === tasks.columnId;
           });
+          const sortedTasks = action.payload.sort((a: Task, b: Task) => a.order - b.order);
           state.columns[index] = {
             ...state.columns[index],
-            tasks: action.payload,
+            tasks: sortedTasks,
           };
         });
         state.error = '';
@@ -178,7 +194,7 @@ const columnsSlice = createSlice({
         state.error = '';
       }),
       builder.addCase(updateOrderTask.pending, (state) => {
-        // state.status = 'loading';
+        state.status = 'loading';
         state.error = '';
       }),
       builder.addCase(updateOrderTask.rejected, (state, action) => {
@@ -196,5 +212,5 @@ const columnsSlice = createSlice({
   },
 });
 
-export const {} = columnsSlice.actions;
+export const { removeTaskFromEmptyColumn } = columnsSlice.actions;
 export default columnsSlice.reducer;

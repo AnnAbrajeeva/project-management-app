@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import BoardTask from 'components/BoardTask';
 import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
@@ -7,7 +7,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import { Button, Tooltip, TextField } from '@mui/material';
 import { ColumnProps, Task } from 'utils/types';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateColumn, deleteColumn, deleteTask } from 'redux/thunks';
+import { updateColumn, deleteColumn, deleteTask, fetchTasks } from 'redux/thunks';
 import { AppDispatch, RootState } from 'redux/store';
 import TaskModal from './TaskModal';
 import ConfirmModal from 'components/ConfirmModal/ConfirmModal';
@@ -143,33 +143,29 @@ function Board({ column, index }: ColumnProps) {
                 </div>
               )}
             </div>
-            {status === 'loading' ? (
-              <Loader />
-            ) : (
-              <Droppable droppableId={column._id}>
-                {(provided) => (
-                  <div
-                    ref={provided.innerRef}
-                    {...provided.droppableProps}
-                    className={style.board__content}
-                  >
-                    {column.tasks && column.tasks.length
-                      ? column.tasks.map((task, i) => {
-                          return (
-                            <BoardTask
-                              selected={selectEditTask}
-                              task={task}
-                              key={task._id}
-                              index={i}
-                            />
-                          );
-                        })
-                      : null}
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            )}
+            <Droppable droppableId={column._id}>
+              {(provided) => (
+                <div
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                  className={style.board__content}
+                >
+                  {column.tasks && column.tasks.length
+                    ? column.tasks.map((task, i) => {
+                        return (
+                          <BoardTask
+                            selected={selectEditTask}
+                            task={task}
+                            key={task._id}
+                            index={i}
+                          />
+                        );
+                      })
+                    : null}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
             <Button
               sx={{ color: '#fff', borderColor: '#fff' }}
               variant="outlined"

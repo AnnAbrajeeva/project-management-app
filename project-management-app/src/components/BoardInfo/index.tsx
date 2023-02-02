@@ -8,14 +8,15 @@ import { AppDispatch, RootState } from 'redux/store';
 import ColumnModal from './ColumnModal';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 import { useDispatch } from 'react-redux';
-import { fetchTasks, updateColumn, updateColumnOrder, updateOrderTask } from 'redux/thunks';
+import { fetchTasks, updateColumnOrder, updateOrderTask } from 'redux/thunks';
 import { Column, Task } from 'utils/types';
-import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { removeTaskFromEmptyColumn } from 'redux/slices/columnSlice';
+import Loader from 'components/Loader';
 
 function BoardInfo() {
   const [open, setOpen] = useState(false);
-  const columns = useSelector((state: RootState) => state.columns.columns);
+  const { columns, status } = useSelector((state: RootState) => state.columns);
   const [columnsArr, setColumnsArr] = useState(columns);
   const dispatch = useDispatch<AppDispatch>();
   const { t } = useTranslation();
@@ -33,22 +34,18 @@ function BoardInfo() {
       return;
 
     if (type === 'column') {
-      const col = [...columns];
-      const spliced = col.splice(source.index, 1)[0];
-      col.splice(destination.index, 0, spliced);
-      setColumnsArr(col);
+      const col = [...columnsArr];
+      const spliced = col.find((column) => column._id === draggableId);
+      col.splice(source.index, 1);
+      col.splice(destination.index, 0, spliced!);
       const newOrder = col.map((column, i) => {
         return {
           _id: column._id,
           order: i + 1,
         };
       });
+      setColumnsArr(col);
       await dispatch(updateColumnOrder(newOrder));
-      columns.map(async (column) => {
-        await dispatch(
-          fetchTasks({ id: columns[destination.index].boardId, columnId: column._id })
-        );
-      });
     } else {
       const colArr = [...columnsArr];
       const [sourceGroup] = colArr.filter((column) => column._id === source.droppableId);
@@ -64,9 +61,15 @@ function BoardInfo() {
       const sourceTasks = [...sourceGroup.tasks!];
       const destinationTasks = [...destinationGroup!.tasks!];
 
-      sourceTasks.splice(source.index, 1);
-
-      destinationTasks.splice(destination.index, 0, movingTask!);
+      if (source.droppableId === destination.droppableId) {
+        destinationTasks.splice(source.index, 1);
+        sourceTasks.splice(source.index, 1);
+        sourceTasks.splice(destination.index, 0, movingTask!);
+        destinationTasks.splice(destination.index, 0, movingTask!);
+      } else {
+        sourceTasks.splice(source.index, 1);
+        destinationTasks.splice(destination.index, 0, movingTask!);
+      }
 
       const newTaskList = colArr.map((column) => {
         if (column._id === source.droppableId) {
@@ -106,8 +109,12 @@ function BoardInfo() {
       if (source.droppableId === destination.droppableId) {
         dispatch(updateOrderTask({ columnId: source.droppableId, tasks: newOrder }));
       } else {
-        await dispatch(updateOrderTask({ columnId: source.droppableId, tasks: sourceOrderTask }));
-        await dispatch(updateOrderTask({ columnId: destination.droppableId, tasks: newOrder }));
+        if (sourceOrderTask.length) {
+          dispatch(updateOrderTask({ columnId: source.droppableId, tasks: sourceOrderTask }));
+        } else {
+          dispatch(removeTaskFromEmptyColumn(source.droppableId));
+        }
+        dispatch(updateOrderTask({ columnId: destination.droppableId, tasks: newOrder }));
       }
     }
   };
@@ -150,6 +157,7 @@ function BoardInfo() {
         </Droppable>
       </Paper>
       <ColumnModal open={open} handleClose={handleClose} />
+      {status === 'loading' && <Loader />}
     </DragDropContext>
   );
 }

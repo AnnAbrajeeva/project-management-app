@@ -52,7 +52,7 @@ function Header({ location }: HeaderProps) {
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-      <Link className={style.logoDraw} to="/">
+      <Link className={style.logoDraw} to="/welcome">
         <Avatar sx={{ mr: 1, cursor: 'pointer' }} alt="Logo" src={Logo} />
 
         <Typography variant="h6" component="div">
@@ -80,7 +80,7 @@ function Header({ location }: HeaderProps) {
                 >
                   <MenuIcon />
                 </IconButton>
-                <Link className={style.logo} to="/">
+                <Link className={style.logo} to="/welcome">
                   <Avatar sx={{ mr: 1, cursor: 'pointer' }} alt="Logo" src={Logo} />
 
                   <Typography variant="h6" component="div">
