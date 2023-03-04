@@ -42,7 +42,6 @@ function BoardsContainer() {
       <Grid sx={{ padding: '30px' }} item xs={12} md={6} lg={4}>
         <EmptyBoard action={openModal} text={t('add_board')} />
       </Grid>
-      <BoardModal />
     </Grid>
   );
 }

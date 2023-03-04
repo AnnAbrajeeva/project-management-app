@@ -34,8 +34,10 @@ function NavLinks() {
   const { t, i18n } = useTranslation();
 
   const handleAlignment = (event: React.MouseEvent<HTMLElement>, newAlignment: string) => {
-    setLang(newAlignment);
-    i18n.changeLanguage(newAlignment.toLowerCase());
+    if (newAlignment) {
+      setLang(newAlignment);
+      i18n.changeLanguage(newAlignment.toLowerCase());
+    }
   };
 
   function addBoard() {

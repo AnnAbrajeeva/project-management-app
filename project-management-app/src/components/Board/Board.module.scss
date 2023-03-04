@@ -75,6 +75,9 @@
     background-color: #0034ff;
     color: #fff;
     padding: 5px 10px;
+    max-width: 200px;
+    overflow: hidden;
+    margin: 1rem 0;
   }
 
   &__content {

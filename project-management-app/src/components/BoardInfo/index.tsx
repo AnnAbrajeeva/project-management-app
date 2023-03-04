@@ -44,7 +44,9 @@ function BoardInfo() {
           order: i + 1,
         };
       });
+
       setColumnsArr(col);
+
       await dispatch(updateColumnOrder(newOrder));
     } else {
       const colArr = [...columnsArr];
@@ -104,18 +106,17 @@ function BoardInfo() {
         };
       });
 
-      setColumnsArr(newTaskList);
-
       if (source.droppableId === destination.droppableId) {
         dispatch(updateOrderTask({ columnId: source.droppableId, tasks: newOrder }));
       } else {
         if (sourceOrderTask.length) {
-          dispatch(updateOrderTask({ columnId: source.droppableId, tasks: sourceOrderTask }));
+          await dispatch(updateOrderTask({ columnId: source.droppableId, tasks: sourceOrderTask }));
         } else {
-          dispatch(removeTaskFromEmptyColumn(source.droppableId));
+          await dispatch(removeTaskFromEmptyColumn(source.droppableId));
         }
-        dispatch(updateOrderTask({ columnId: destination.droppableId, tasks: newOrder }));
+        await dispatch(updateOrderTask({ columnId: destination.droppableId, tasks: newOrder }));
       }
+      setColumnsArr(newTaskList);
     }
   };
 
@@ -136,8 +137,6 @@ function BoardInfo() {
       <Paper
         sx={{
           backgroundColor: 'transparent',
-          pt: '20px',
-          pb: '20px',
           position: 'relative',
           overflowY: 'unset',
         }}

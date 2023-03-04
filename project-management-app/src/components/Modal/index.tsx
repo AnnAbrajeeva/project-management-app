@@ -24,7 +24,7 @@ function Modal({
       <div onClick={handleClose} className={style.close}>
         <CloseIcon />
       </div>
-      <form>
+      <form onSubmit={handleSubmit(formSubmit)}>
         <DialogTitle>{title}</DialogTitle>
         <DialogContent>{children}</DialogContent>
         <DialogActions>

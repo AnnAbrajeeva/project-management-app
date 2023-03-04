@@ -16,6 +16,7 @@ import { removeUser } from 'redux/slices/userSlice';
 import { removeFromLocal } from 'utils/localStorage';
 import AuthVerify from 'common/AuthVerify';
 import UserProfile from 'pages/UserProfile';
+import BoardModal from 'components/BoardsContainer/BoardModal';
 
 const theme = createTheme({
   typography: {
@@ -48,6 +49,7 @@ function App() {
       </Routes>
       <Footer />
       <Toast />
+      <BoardModal />
       <AuthVerify logOut={logOut} />
     </ThemeProvider>
   );

@@ -1,10 +1,10 @@
 .wrapper {
   display: flex;
   gap: 25px;
-  height: calc(100vh - 452px);
+  height: calc(100vh - 378px);
   margin: 0 auto;
   background: rgb(23 89 255 / 30%);
-  padding: 3em;
+  padding: 1rem;
   border-radius: 20px;
   border-left: 1px solid rgba(255, 255, 255, 0.3);
   border-top: 1px solid rgba(255, 255, 255, 0.3);
@@ -16,7 +16,7 @@
 
   @media (max-width: 500px) {
     & {
-      padding: 3em 0.5em;
+      padding: 1rem 0.5rem;
     }
   }
 

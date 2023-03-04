@@ -106,7 +106,17 @@ const columnsSlice = createSlice({
       builder.addCase(updateColumnOrder.fulfilled, (state, action) => {
         state.status = 'success';
         state.error = '';
-        // state.columns = action.payload;
+        state.columns = state.columns.map((column) => {
+          const newOrderColumn = action.payload.find((col: Column) => col._id === column._id);
+          if (column._id == newOrderColumn._id) {
+            return {
+              ...column,
+              order: newOrderColumn.order,
+            };
+          } else {
+            return column;
+          }
+        });
       }),
       builder.addCase(fetchTasks.pending, (state) => {
         state.status = 'loading';
