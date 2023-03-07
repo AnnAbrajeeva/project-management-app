@@ -1,0 +1,14 @@
+.wrapper {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.title {
+  font-family: 'Montserrat';
+  font-weight: bold;
+  font-size: 2rem;
+  color: #fff;
+}
