@@ -1,20 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap');
 
 .welcome {
-  background-image: linear-gradient( 69deg, rgb(31 73 213) 11.4%, rgba(32, 38, 57, 1) 70.2% );
-  flex: 1 0 auto;
+  background-image: linear-gradient(69deg, rgb(31 73 213) 11.4%, rgba(32, 38, 57, 1) 70.2%);
+  max-height: 100vh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
 }
 
 .welcome-main {
-  height: calc(100vh - 120px);
+  height: calc(100vh);
+  scroll-snap-align: start;
   display: flex;
   align-items: center;
   padding: 0 40px;
 }
 
 .welcome-main2 {
-  background-image: linear-gradient( 202deg, rgb(31 73 213) 11.4%, rgba(32, 38, 57, 1) 70.2% );
-  height: calc(100vh - 54px);
+  background-image: linear-gradient(202deg, rgb(31 73 213) 11.4%, rgba(32, 38, 57, 1) 70.2%);
+  height: calc(100vh);
+  scroll-snap-align: start;
   display: flex;
   align-items: center;
   padding: 0 40px;
@@ -29,10 +33,24 @@
 }
 
 .welcome-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   display: flex;
   justify-content: flex-end;
   margin-bottom: 10px;
   padding: 40px;
+}
+
+.link {
+  text-decoration: none;
+}
+
+.links {
+  display: flex;
+  gap: 20px;
+  margin-right: 20px;
 }
 
 .welcome-info {
@@ -44,7 +62,7 @@
 
 .welcome-info p {
   font-family: 'Roboto Slab', serif;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   color: white;
   text-align: justify;
   padding: 5px;
@@ -64,5 +82,30 @@
   }
   .welcome-info {
     flex-direction: column-reverse;
+  }
+}
+
+@media (max-width: 415px) {
+  .welcome-header {
+    flex-wrap: wrap;
+    flex-direction: column-reverse;
+    padding: 20px;
+  }
+  .links {
+    margin-right: 0;
+    margin-top: 20px;
+    margin-left: auto;
+  }
+
+  .lang {
+    margin-left: auto;
+  }
+
+  .welcome-info {
+    gap: 50px;
+  }
+
+  .welcome-info p {
+    font-size: 12px;
   }
 }

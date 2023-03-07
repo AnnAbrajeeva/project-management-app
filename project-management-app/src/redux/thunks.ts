@@ -32,7 +32,12 @@ export const fetchBoardById = createAsyncThunk(
       const res = await api.get(`/boards/${id}`, { data: { id } });
       return res.data;
     } catch (error) {
-      return rejectWithValue('Could not fetch board. Please, try again later.');
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 404) {
+          return rejectWithValue(error.response?.data.message);
+        }
+        return rejectWithValue('Ошибка сервера, попробуйте позже');
+      }
     }
   }
 );

@@ -3,7 +3,6 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import './styles.css';
-import style from './WelcomePage.module.scss';
 import { ToggleButton } from './styled';
 import { getFromLocal } from 'utils/localStorage';
 import Img from '../../assets/img/process_optimization_5.jpg';
@@ -25,17 +24,17 @@ function Welcome() {
     <div className="welcome">
       <div className="welcome-header">
         {!isAuth ? (
-          <div className={style.links}>
-            <Link className={style.link} to={'/login'}>
+          <div className="links">
+            <Link className="link" to={'/login'}>
               <Button variant="contained">{t('logIn')}</Button>
             </Link>
 
-            <Link className={style.link} to={'/registration'}>
+            <Link className="link" to={'/registration'}>
               <Button variant="contained">{t('registration')}</Button>
             </Link>
           </div>
         ) : (
-          <Link className={style.link} to={'/'}>
+          <Link className="link" to={'/'}>
             <Button variant="contained">На главную</Button>
           </Link>
         )}
@@ -45,6 +44,7 @@ function Welcome() {
           exclusive
           onChange={handleAlignment}
           aria-label="change lang"
+          className="lang"
         >
           <ToggleButton value="RU" aria-label="RU">
             RU
@@ -54,20 +54,22 @@ function Welcome() {
           </ToggleButton>
         </ToggleButtonGroup>
       </div>
-      <div className="welcome-main">
-        <div className="welcome-info">
-          <p>{t('welcome_text_1')}</p>
-          <img
-            className="welcome-img"
-            src="https://img.freepik.com/free-vector/scrum-method-concept-illustration_114360-9828.jpg?w=2000"
-            alt="img"
-          />
+      <div className="container">
+        <div className="welcome-main">
+          <div className="welcome-info">
+            <p>{t('welcome_text_1')}</p>
+            <img
+              className="welcome-img"
+              src="https://img.freepik.com/free-vector/scrum-method-concept-illustration_114360-9828.jpg?w=2000"
+              alt="img"
+            />
+          </div>
         </div>
-      </div>
-      <div className="welcome-main2">
-        <div className="welcome-info welcome-info2">
-          <p>{t('welcome_text_2')}</p>
-          <img className="welcome-img" src={Img} alt="img" />
+        <div className="welcome-main2">
+          <div className="welcome-info welcome-info2">
+            <p>{t('welcome_text_2')}</p>
+            <img className="welcome-img" src={Img} alt="img" />
+          </div>
         </div>
       </div>
     </div>

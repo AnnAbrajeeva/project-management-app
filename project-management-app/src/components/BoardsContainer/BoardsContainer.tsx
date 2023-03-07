@@ -7,9 +7,9 @@ import React, { useEffect } from 'react';
 import { fetchBoards, getUsers } from 'redux/thunks';
 import Loader from 'components/Loader';
 import { Board } from 'utils/types';
-import BoardModal from './BoardModal';
 import { setModal } from 'redux/slices/boardSlice';
 import { useTranslation } from 'react-i18next';
+import { getFromLocal } from 'utils/localStorage';
 
 function BoardsContainer() {
   const dispatch = useDispatch<AppDispatch>();
@@ -17,8 +17,11 @@ function BoardsContainer() {
   const { t } = useTranslation();
 
   useEffect(() => {
-    dispatch(fetchBoards());
-    dispatch(getUsers());
+    const isAuth = getFromLocal('token');
+    if (isAuth) {
+      dispatch(fetchBoards());
+      dispatch(getUsers());
+    }
   }, [dispatch]);
 
   if (status === 'loading') {

@@ -17,18 +17,20 @@ import style from './BoardPage.module.scss';
 function BoardPage() {
   const { id } = useParams();
   const dispatch = useDispatch<AppDispatch>();
-  const { board, status } = useSelector((state: RootState) => state.board);
+  const { board, status, error } = useSelector((state: RootState) => state.board);
   const navigate = useNavigate();
   const { t } = useTranslation();
 
   useEffect(() => {
     const isAuth = getFromLocal('token');
     if (!isAuth) {
-      setOpen({
-        open: true,
-        message: 'Время действия токена истекло.',
-        view: 'error',
-      });
+      dispatch(
+        setOpen({
+          open: true,
+          message: 'Время действия токена истекло.',
+          view: 'error',
+        })
+      );
       navigate('/welcome');
     }
   }, []);
@@ -36,16 +38,36 @@ function BoardPage() {
   useEffect(() => {
     const fetchData = async () => {
       if (id) {
-        const res = await dispatch(fetchColumnsById(id));
-        res.payload.forEach(async (column: Column) => {
-          await dispatch(fetchTasks({ id: column.boardId, columnId: column._id }));
-        });
         await dispatch(fetchBoardById(id));
-        await dispatch(getUsers());
       }
     };
     fetchData();
   }, [dispatch, id]);
+
+  useEffect(() => {
+    if (error) {
+      dispatch(
+        setOpen({
+          open: true,
+          message: error,
+          view: 'error',
+        })
+      );
+    }
+  }, [error, dispatch]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (id && board) {
+        const res = await dispatch(fetchColumnsById(id));
+        res.payload.forEach(async (column: Column) => {
+          await dispatch(fetchTasks({ id: column.boardId, columnId: column._id }));
+        });
+        await dispatch(getUsers());
+      }
+    };
+    fetchData();
+  }, [dispatch, id, board]);
 
   const title = board ? board.title : '';
 

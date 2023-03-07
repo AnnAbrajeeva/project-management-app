@@ -31,5 +31,6 @@ api.interceptors.response.use(
       removeFromLocal('token');
       removeFromLocal('user');
     }
+    return Promise.reject(error);
   }
 );

@@ -43,8 +43,8 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/registration" element={<AuthPage />} />
         <Route path="/welcome" element={<Welcome />} />
-        <Route path="/boards/:id" element={<BoardPage />} />
         <Route path="/profile" element={<UserProfile />} />
+        <Route path="/boards/:id" element={<BoardPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />

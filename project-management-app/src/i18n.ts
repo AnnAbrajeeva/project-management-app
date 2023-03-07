@@ -11,7 +11,7 @@ i18n
   .use(LanguageDetector)
   .init({
     supportedLngs: ['en', 'ru'],
-    debug: true,
+    debug: false,
     fallbackLng: 'ru',
     detection: {
       order: ['localStorage'],

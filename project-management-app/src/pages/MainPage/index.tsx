@@ -8,19 +8,24 @@ import { getFromLocal } from 'utils/localStorage';
 import { useNavigate } from 'react-router-dom';
 import { setOpen } from 'redux/slices/snackbarSlice';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from 'redux/store';
 
 function MainPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     const isAuth = getFromLocal('token');
     if (!isAuth) {
-      setOpen({
-        open: true,
-        message: `${t('expired_token')}`,
-        view: 'error',
-      });
+      dispatch(
+        setOpen({
+          open: true,
+          message: `${t('expired_token')}`,
+          view: 'error',
+        })
+      );
       navigate('/welcome');
     }
   }, []);
